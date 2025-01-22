@@ -1,42 +1,37 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans&display=swap');
+
+body {
+  background-color: black;
+  color: white;
+  height: 100vh;
+}
+
+/* Container for the text */
+.container {
   text-align: center;
+  padding: 1rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Text styles */
+.txt {
+  font-size: 10vw; /* Make font size responsive */
+  font-weight: 600;
+  text-shadow: 0 0 rgb(0, 255, 255), 0 0 rgb(0, 255, 255);
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .txt {
+    font-size: 12vw; /* Slightly larger font size for small screens */
+    text-shadow: 0 0 8px cyan, 0 0 16px cyan;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media (max-width: 480px) {
+  .txt {
+    font-size: 14vw; /* Adjust font size for extra small screens */
+    text-shadow: 0 0 6px cyan, 0 0 12px cyan;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

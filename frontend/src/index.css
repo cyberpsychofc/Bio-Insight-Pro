@@ -6,4 +6,50 @@
   .text-shadow {
     text-shadow: 0 0 10px cyan, 0 0 10px cyan;
   }
+
+  body {
+    @apply bg-black;
+  }
+
+  .container {
+    @apply absolute top-1/2 left-1/2 bg-black transform -translate-x-1/2 -translate-y-1/2 inline-flex overflow-hidden;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.8);
+    filter: brightness(100%);
+  }
+
+  .txt {
+    @apply text-white bg-black text-[150px] relative;
+    font-family: 'Google Sans', serif;
+  }
+
+  .txt::before {
+    content: 'BIO INSIGHT PRO';
+    @apply absolute mix-blend-difference;
+    filter: blur(2px);
+    font-family: 'Google Sans', serif;
+  }
+
+  .gradient {
+    @apply absolute top-0 left-0 w-full h-full;
+    mix-blend-mode: multiply;
+    background: linear-gradient(117deg, rgb(10, 169, 237) 4%, rgb(0, 247, 255) 97%);
+  }
+
+  .dodge {
+    @apply absolute top-[-100%] left-[-100%] right-0 bottom-0;
+    mix-blend-mode: color-dodge;
+    background: radial-gradient(circle, rgb(255, 255, 255), black 35%) center / 60% 60%;
+    @apply animate-neon;
+  }
+
+  @keyframes neon {
+    0% {
+      transform: translate(-100%, -100%);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(100%, 100%);
+      opacity: 0.7;
+    }
+  }
 }

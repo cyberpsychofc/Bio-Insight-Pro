@@ -13,26 +13,21 @@ const Navbar = () => {
           </a>
           <a href="#" class="relative group hover:text-white">
             <span class="after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full">
+              Similarity
+            </span>
+          </a>
+          <a href="#" class="relative group hover:text-white">
+            <span class="after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full">
               About
             </span>
           </a>
-          <a href="#" class="relative group hover:text-white">
-            <span class="after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full">
-              Journal
-            </span>
-          </a>
-          <a href="#" class="relative group hover:text-white">
-            <span class="after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full">
-              Contact
-            </span>
-          </a>
-          <a href="#" class="relative group hover:text-white">
-            <span class="after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full">
-              Quality Check
-            </span>
-          </a>
+          
         </div>
-        <button class="bg-cyan-300 rounded p-2 text-black font-semibold text-base shadow-[0_0_10px_#22d3ee] transition-all duration-300 hover:bg-transparent hover:text-cyan-300 hover:shadow-[0_0_10px_#000000]">Sign up</button>
+        <div className="">
+          <button class="bg-cyan-300 rounded p-3 mr-2 text-black font-semibold text-base shadow-[0_0_10px_#22d3ee] transition-all duration-300 hover:bg-transparent hover:text-cyan-300 hover:shadow-[0_0_10px_#000000]">Sign up</button>
+        <button class="bg-cyan-300 rounded p-3 text-black font-semibold text-base shadow-[0_0_10px_#22d3ee] transition-all duration-300 hover:bg-transparent hover:text-cyan-300 hover:shadow-[0_0_10px_#000000]">Log In</button>
+        </div>
+        
       </nav>
     </>
   )

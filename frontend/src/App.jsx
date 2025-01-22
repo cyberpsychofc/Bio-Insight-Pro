@@ -7,7 +7,7 @@ function App() {
   // Handle scroll event
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 950) {
+      if (window.scrollY > 690) {
         setIsFixedDivVisible(true);
       } else {
         setIsFixedDivVisible(false);
@@ -32,9 +32,13 @@ function App() {
   return (
     <>
       {/* Main Heading */}
-<div className="flex justify-center mt-60 mb-60 px-10 py-16 relative">
-  <div className="text-white flex justify-center text-9xl font-semibold neon-text">
-    <h1 className="text-shadow">BIO INSIGHT PRO</h1>
+<div className="mt-60 mb-60 px-10 py-16 relative justify-center">
+  <div className="text-white text-9xl neon-text justify-center">
+  <div class="container justify-center">
+      <span className="txt">BIO INSIGHT PRO</span>
+      <span className="gradient"></span>
+      <span className="dodge"></span>
+    </div>
   </div>
 </div>
 
@@ -63,18 +67,19 @@ function App() {
 
       {/* Small Fixed Div */}
       <div
-        id="fixedDiv"
-        className={`backdrop-blur-md fixed bottom-4 mx-auto left-0 right-0 w-4/5 sm:w-3/5 md:w-2/5 lg:w-1/4 transition-all duration-300 px-6 py-6 text-3xl rounded-lg shadow-lg cursor-pointer bg-cyan-300 hover:bg-transparent text-black hover:text-cyan-300 text-center ${
-          isFixedDivVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-      >
-        <button
-          onClick={() => document.getElementById('file-upload').click()}
-          className="font-semibold"
-        >
-          Select Document(s)
-        </button>
-      </div>
+  id="fixedDiv"
+  className={`backdrop-blur-md fixed z-50 bottom-4 mx-auto left-0 right-0 w-4/5 sm:w-3/5 md:w-2/5 lg:w-1/4 transition-all duration-300 px-6 py-6 text-3xl rounded-lg shadow-lg cursor-pointer bg-cyan-300 hover:bg-transparent text-black hover:text-cyan-300 text-center ${
+    isFixedDivVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+  }`}
+>
+  <button
+    onClick={() => document.getElementById('file-upload').click()}
+    className="font-semibold"
+  >
+    Select Document(s)
+  </button>
+</div>
+
     </>
   );
 }
