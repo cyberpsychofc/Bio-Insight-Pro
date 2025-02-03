@@ -14,7 +14,8 @@ body {
 
 /* Text styles */
 .txt {
-  font-size: 10vw; /* Make font size responsive */
+  font-size: 10vw;
+  /* Make font size responsive */
   font-weight: 600;
   text-shadow: 0 0 rgb(0, 255, 255), 0 0 rgb(0, 255, 255);
   line-height: 1.2;
@@ -24,14 +25,16 @@ body {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .txt {
-    font-size: 12vw; /* Slightly larger font size for small screens */
+    font-size: 12vw;
+    /* Slightly larger font size for small screens */
     text-shadow: 0 0 8px cyan, 0 0 16px cyan;
   }
 }
 
 @media (max-width: 480px) {
   .txt {
-    font-size: 14vw; /* Adjust font size for extra small screens */
+    font-size: 14vw;
+    /* Adjust font size for extra small screens */
     text-shadow: 0 0 6px cyan, 0 0 12px cyan;
   }
 }

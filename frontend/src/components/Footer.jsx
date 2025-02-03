@@ -1,16 +1,16 @@
-import React from 'react'
+import React from 'react';
 
-const Footer = () => {
+const Footer = React.forwardRef((_, ref) => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <div className="flex-grow"></div>
-      <footer className="text-white bg-cyan-950 bottom-0 left-0 w-full">
-        <p className='text-xl text-center'>
-          © Copyright 2025, Bio Insight Pro. All rights reserved.
-        </p>
-      </footer>
-    </div>
-  )
-}
+    <footer
+      ref={ref}
+      className="text-white bg-gray-950 w-full py-4 text-center"
+    >
+      <p className="text-xl">
+        © Copyright 2025, Bio Insight Pro. All rights reserved.
+      </p>
+    </footer>
+  );
+});
 
-export default Footer
+export default Footer;

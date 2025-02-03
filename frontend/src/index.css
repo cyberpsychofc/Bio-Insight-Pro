@@ -31,8 +31,8 @@
 
   .gradient {
     @apply absolute top-0 left-0 w-full h-full;
-    mix-blend-mode: multiply;
-    background: linear-gradient(117deg, rgb(10, 169, 237) 4%, rgb(0, 247, 255) 97%);
+    mix-blend-mode:soft-light ;
+    background: linear-gradient(30deg, rgb(4, 158, 247) 20%, rgb(0, 247, 255) 80%);
   }
 
   .dodge {
@@ -40,16 +40,5 @@
     mix-blend-mode: color-dodge;
     background: radial-gradient(circle, rgb(255, 255, 255), black 35%) center / 60% 60%;
     @apply animate-neon;
-  }
-
-  @keyframes neon {
-    0% {
-      transform: translate(-100%, -100%);
-      opacity: 1;
-    }
-    100% {
-      transform: translate(100%, 100%);
-      opacity: 0.7;
-    }
   }
 }

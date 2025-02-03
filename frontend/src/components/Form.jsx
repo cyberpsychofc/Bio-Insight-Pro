@@ -36,7 +36,7 @@ const Form = () => {
           </div>
           <div className="grid justify-center">
             <TogglePlug />
-            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -55,7 +55,7 @@ const Form = () => {
           </div>
 
           <div className=''>
-            <TogglePlug/>
+            <TogglePlug />
             {/* Summary Section */}
             <div className="p-4 rounded-lg border bg-gray-950">
               <h2 className="font-bold mb-2">Summary</h2>
