@@ -3,3 +3,11 @@ djangorestframework
 python-dotenv
 django-cors-headers
 gunicorn
+nltk
+langchain
+numpy
+pandas
+pypdf
+scikit-learn
+transformers
+# (torch w/ cuda) pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
