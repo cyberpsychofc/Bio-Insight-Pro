@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useDropzone } from 'react-dropzone';
 import Footer from './components/Footer.jsx';
 import Summary from './components/Summary.jsx';
 import Table from './components/Table.jsx';
+import ImageText from './components/ImageText.jsx';
 
 function App() {
   const [isFixedDivVisible, setIsFixedDivVisible] = useState(false);
@@ -32,11 +34,9 @@ function App() {
     const files = event.target.files;
     if (files.length > 0) {
       const formData = new FormData();
-      for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i]); // Using 'files' as the key to match the backend
-      }
+      for (let i = 0; i < files.length; i++) formData.append('files', files[i]);
   
-      axios.post('http://127.0.0.1:8000/api/upload/', formData, { // Correct endpoint URL
+      axios.post('http://localhost:8000/api/upload/', formData, { // Correct endpoint URL
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -87,8 +87,7 @@ function App() {
           Select document(s)
         </div>
         {/*New Components Here*/}
-        <Table/>
-        <Summary/>
+        <ImageText/>
       </div>
 
       {/* Footer */}
