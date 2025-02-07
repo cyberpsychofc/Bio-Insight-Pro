@@ -83,7 +83,7 @@ class FindSimilarity(APIView):
 class Retreival(APIView):
     def get(self, request):
         # Wait for Embeddings to get stored on Pinecone
-        time.sleep(5)
+        time.sleep(10)
         
         firstportion = load_original_documents(index, Session.most_similar['left_chunk'])
         secondportion = load_original_documents(index, Session.most_similar['left_chunk'])

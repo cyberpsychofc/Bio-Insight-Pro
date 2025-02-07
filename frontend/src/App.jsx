@@ -1,96 +1,161 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useDropzone } from 'react-dropzone';
 import Footer from './components/Footer.jsx';
-import Summary from './components/Summary.jsx';
-import Table from './components/Table.jsx';
 import ImageText from './components/ImageText.jsx';
+import ShinyText from './components/ui/ShinyText.jsx';
+import TitleCard from './components/TitleCard.jsx';
+import { useNavigate } from "react-router"
 
 function App() {
+  const nav = useNavigate();
   const [isFixedDivVisible, setIsFixedDivVisible] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const footerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  // Handle scroll event
   useEffect(() => {
     const handleScroll = () => {
-      const footerTop = footerRef.current.getBoundingClientRect().top + window.scrollY;
-
-      if (window.scrollY > 690 && window.scrollY + 1000 <= footerTop) {
-        setIsFixedDivVisible(true);
-      } else {
-        setIsFixedDivVisible(false);
-      }
+      const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
+      setIsFixedDivVisible(window.scrollY > 890 && window.scrollY + 1000 <= footerTop);
     };
 
     window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-
-  const handleFile = (event) => {
-    const files = event.target.files;
+  const handleFileUpload = (files) => {
     if (files.length > 0) {
       const formData = new FormData();
-      for (let i = 0; i < files.length; i++) formData.append('files', files[i]);
-  
-      axios.post('http://localhost:8000/api/upload/', formData, { // Correct endpoint URL
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }).then((response) => {
-        console.log("Files uploaded successfully", response.data);
-      }).catch((error) => {
-        console.error("Error uploading files:", error.response ? error.response.data : error.message);
-      });
+      const fileDetails = Array.from(files).map((file) => ({
+        name: file.name,
+        size: file.size,
+        timestamp: new Date().toLocaleString(),
+      }));
+
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i]);
+      }
+
+      axios.post('http://localhost:8000/api/upload/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+        .then((response) => {
+          console.log("Files uploaded successfully", response.data);
+          setUploadedFiles((prevFiles) => [...prevFiles, ...fileDetails]);
+        })
+        .catch((error) => console.error("Error uploading files:", error.response?.data || error.message));
     }
   };
-  
-  
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => setIsDragging(false);
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setIsDragging(false);
+    handleFileUpload(event.dataTransfer.files);
+  };
+
+  const handleRemoveFile = (index) => {
+    setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
+      <TitleCard />
       <div className="flex-grow">
-        {/* File Drop Area */}
-        <div className="relative flex items-center justify-center py-1">
-          <div className="absolute inset-0 backdrop-blur-md bg-transparent"></div>
-          <div className="relative w-full max-w-3xl p-10 backdrop-blur-md bg-transparent text-white rounded-lg shadow-lg border-2 border-dashed border-gray-700 hover:border-gray-500 text-center">
-            <p className="text-gray-400 text-2xl mb-4">Drag & drop your document here</p>
-            <p className="text-gray-400 mb-4 text-2xl"> or </p>
-            <button
-              className="bg-cyan-300 rounded px-8 py-3 text-lg text-black font-semibold hover:bg-transparent hover:text-cyan-300 transition-all duration-300 shadow-[0_0_10px_#22d3ee]"
-              onClick={() => document.getElementById('file-upload').click()}
-            >
-              Select document(s)
-            </button>
-            <input
-              id="file-upload"
-              type="file"
-              className="hidden"
-              onChange={handleFile}
-              accept=".pdf,.doc,.docx,.txt"
-              multiple
-            />
-            <div id="file-preview" className="mt-6 text-lg text-gray-300 hidden"></div>
+        <div className="relative flex items-center justify-center pt-10 px-5">
+          <div
+            className={`relative w-full max-w-5xl md:py-8 text-white rounded-lg shadow-lg transition-all duration-300 text-center
+              ${isDragging ? 'border-cyan-300 bg-gray-800' : 'border-gray-700 hover:border-gray-500'}`}
+          >
+            <div className="flex flex-col items-center justify-center border-2 p-10 rounded border-gray-700 w-full">
+              <label htmlFor="file-upload" className="flex flex-col items-center justify-center bg-gray-950 rounded-md hover:bg-gray-700 border-2 border-dashed border-gray-700 hover:border-gray-500 cursor-pointer h-64 w-full" onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}>
+                <div className="flex flex-col items-center justify-center px-5 md:px-10 py-10 md:py-20"
+                >
+                  <svg className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                  </svg>
+                  <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                  <p className="text-xs text-gray-500">PDF</p>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handleFileUpload(e.target.files)}
+                    accept=".pdf"
+                    multiple
+                  />
+                </div>
+              </label>
+              <p className="text-gray-400 text-2xl mt-4">or</p>
+              <button
+                className="bg-cyan-300 rounded text-lg text-black font-semibold hover:bg-transparent hover:text-cyan-300 transition-all duration-300 shadow-[0_0_10px_#22d3ee] px-8 py-3 mt-4"
+                onClick={() => document.getElementById('file-upload').click()}
+              >
+                Select document(s)
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Small Fixed Div */}
         <div
-          id="fixedDiv"
-          className={`font-semibold backdrop-blur-md fixed z-50 bottom-4 mx-auto left-0 right-0 w-4/5 sm:w-3/5 md:w-2/5 lg:w-1/4 transition-all duration-300 px-6 py-6 text-3xl rounded-lg shadow-lg cursor-pointer bg-cyan-300 hover:bg-transparent text-black hover:text-cyan-300 text-center ${isFixedDivVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-            }`}
+          className={`font-semibold backdrop-blur-md fixed z-50 bottom-4 mx-auto left-0 right-0 w-4/5 sm:w-3/5 md:w-2/5 lg:w-1/4 transition-all duration-300 px-6 py-6 text-3xl rounded-lg shadow-lg cursor-pointer bg-cyan-300 hover:bg-transparent text-black hover:text-cyan-300 text-center 
+            ${isFixedDivVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
           onClick={() => document.getElementById('file-upload').click()}
         >
           Select document(s)
         </div>
-        {/*New Components Here*/}
-        <ImageText/>
+
+        {/* Uploaded Files Info */}
+        <div className="px-20 bg-gray-950 py-5 mt-20 mx-20 mb-10 rounded">
+          <h2 className="text-xl text-white mb-4">Uploaded Files</h2>
+          {uploadedFiles.length === 0 ? (
+            <p className="text-white">No files uploaded</p>
+          ) : (
+            <ul>
+              {uploadedFiles.map((file, index) => (
+                <li
+                  key={index}
+                  className="flex justify-between items-center bg-gray-800 p-4 mb-2 rounded-md"
+                >
+                  <div>
+                    <p className="text-white">{file.name}</p>
+                    <p className="text-gray-400 text-sm">
+                      {(file.size / 1024).toFixed(2)} KB - {file.timestamp}
+                    </p>
+                  </div>
+                  <button
+                    className="bg-red-500 text-white rounded px-4 py-2"
+                    onClick={() => handleRemoveFile(index)}
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="flex justify-center mt-4">
+          <button
+            className="bg-cyan-300 rounded text-lg text-black font-semibold hover:bg-transparent hover:text-cyan-300 transition-all duration-300 shadow-[0_0_10px_#22d3ee] px-8 py-3"
+            onClick={() => nav('/similarity')}
+          >
+            Analyze
+
+          </button>
+        </div>
+        {/* New Components Right Here */}
+        <ImageText />
       </div>
 
-      {/* Footer */}
       <div ref={footerRef} className='mt-5'>
         <Footer />
       </div>
@@ -99,7 +164,3 @@ function App() {
 }
 
 export default App;
-
-{/* http://127.0.0.1:8000/api/upload/
-key params is files
-for django */}
