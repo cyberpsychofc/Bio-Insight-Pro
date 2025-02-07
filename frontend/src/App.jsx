@@ -9,8 +9,8 @@ import { useNavigate } from "react-router"
 function App() {
   const nav = useNavigate();
   const [isFixedDivVisible, setIsFixedDivVisible] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState([]);
   const footerRef = useRef(null);
+  const [localFiles, setLocalFiles] = useState({});
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
@@ -26,12 +26,6 @@ function App() {
   const handleFileUpload = (files) => {
     if (files.length > 0) {
       const formData = new FormData();
-      const fileDetails = Array.from(files).map((file) => ({
-        name: file.name,
-        size: file.size,
-        timestamp: new Date().toLocaleString(),
-      }));
-
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
       }
@@ -41,7 +35,7 @@ function App() {
       })
         .then((response) => {
           console.log("Files uploaded successfully", response.data);
-          setUploadedFiles((prevFiles) => [...prevFiles, ...fileDetails]);
+          nav('/similarity');
         })
         .catch((error) => console.error("Error uploading files:", error.response?.data || error.message));
     }
@@ -57,11 +51,17 @@ function App() {
   const handleDrop = (event) => {
     event.preventDefault();
     setIsDragging(false);
-    handleFileUpload(event.dataTransfer.files);
+    setLocalFiles(event.dataTransfer.files);
   };
 
   const handleRemoveFile = (index) => {
-    setUploadedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    const dataTransfer = new DataTransfer();
+    Array.from(localFiles).forEach((file, i) => {
+      if (i != index) {
+        dataTransfer.items.add(file);
+      }
+    });
+    setLocalFiles(dataTransfer.files);
   };
 
   return (
@@ -88,7 +88,9 @@ function App() {
                     id="file-upload"
                     type="file"
                     className="hidden"
-                    onChange={(e) => handleFileUpload(e.target.files)}
+                    onChange={(e) => {
+                      setLocalFiles(e.target.files);
+                    }}
                     accept=".pdf"
                     multiple
                   />
@@ -114,13 +116,14 @@ function App() {
         </div>
 
         {/* Uploaded Files Info */}
-        <div className="px-20 bg-gray-950 py-5 mt-20 mx-20 mb-10 rounded">
-          <h2 className="text-xl text-white mb-4">Uploaded Files</h2>
-          {uploadedFiles.length === 0 ? (
+        <div className='flex items-center justify-center flex-col'>
+        <div className="px-20 border-2 border-gray-700 w-2/3 py-5 mt-20 mx-20 mb-10 rounded-lg">
+          <h2 className="text-xl text-white mb-4 p-2">Uploaded Files</h2>
+          {Array.from(localFiles).length === 0 ? (
             <p className="text-white">No files uploaded</p>
           ) : (
             <ul>
-              {uploadedFiles.map((file, index) => (
+              {Array.from(localFiles).map((file, index) => (
                 <li
                   key={index}
                   className="flex justify-between items-center bg-gray-800 p-4 mb-2 rounded-md"
@@ -142,11 +145,14 @@ function App() {
             </ul>
           )}
         </div>
+        </div>
 
         <div className="flex justify-center mt-4">
           <button
             className="bg-cyan-300 rounded text-lg text-black font-semibold hover:bg-transparent hover:text-cyan-300 transition-all duration-300 shadow-[0_0_10px_#22d3ee] px-8 py-3"
-            onClick={() => nav('/similarity')}
+            onClick={() => {
+              handleFileUpload(localFiles);
+            }}
           >
             Analyze
 

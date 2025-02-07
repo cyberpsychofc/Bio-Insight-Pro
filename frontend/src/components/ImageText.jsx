@@ -12,9 +12,11 @@ const ImageText = () => {
         </div>
         {/* Text Section */}
         <div className="mt-4 ml-60">
-          <h2 className="font-bold text-gray-800 mb-4 md:mb-16">Title Text</h2>
-          <p className="text-gray-600">
-            This is a short description of the component. You can add more details here as needed.
+          <h2 className="font-bold text-gray-200 md:mb-4"> AI-Powered Document Analysis</h2>
+          <p className="text-gray-400 pr-8">
+            A futuristic representation of intelligent document processing, highlighting AI-driven data analysis and pattern recognition.
+            Find deep insights, emphasizing precision in extracting knowledge for research, decision-making,
+            and biomedical advancements.
           </p>
         </div>
       </div>
@@ -22,9 +24,10 @@ const ImageText = () => {
       <div className="flex flex-col md:flex-row items-center mt-10 text-base md:text-xl lg:text-2xl shadow rounded-lg p-4 lg:p-10">
         {/* Text Section */}
         <div className="mt-4 md:mt-0 md:ml-4 order-2 md:order-1 mr-60">
-          <h2 className="font-bold text-gray-800 mb-4 md:mb-16">Title Text</h2>
-          <p className="text-gray-600">
-            This is a short description of the component. You can add more details here as needed.
+          <h2 className="font-bold text-gray-200 md:mb-4">Genetic Pattern Recognition</h2>
+          <p className="text-gray-400">
+            Advanced pattern recognition in genetic data.
+            Perform in-depth analysis, enabling breakthroughs in genomics, medical research, and precision medicine for improved healthcare and disease prevention
           </p>
         </div>
         {/* Image Section */}
@@ -40,9 +43,11 @@ const ImageText = () => {
         </div>
         {/* Text Section */}
         <div className="mt-4 ml-60">
-          <h2 className="font-bold text-gray-800 mb-4 md:mb-16">Title Text</h2>
-          <p className="text-gray-600">
-            This is a short description of the component. You can add more details here as needed.
+          <h2 className="font-bold text-gray-200 md:mb-4">Bio-Med Knowledge Graph Generation</h2>
+          <p className="text-gray-400">
+            Transform biomedical documents into structured knowledge graphs, revealing hidden connections and insights. 
+            Enables researchers and healthcare professionals to visualize relationships, enhance decision-making, and 
+            accelerate drug discovery and diagnosis.
           </p>
         </div>
       </div>

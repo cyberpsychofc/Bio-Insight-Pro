@@ -12,7 +12,6 @@ export default function Similarity() {
     const [loadingText, setLoadingText] = useState("Thinking");
     const sampleText = [
         "Thinking",
-        "Gathering Data",
         "Creating Embeddings",
         "Finding Patterns",
         "Calculating Similarities",
