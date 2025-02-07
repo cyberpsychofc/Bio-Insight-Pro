@@ -8,6 +8,7 @@ langchain
 langchain-pinecone
 langchain-community
 langchain-groq
+matplotlib
 numpy
 pinecone
 pandas

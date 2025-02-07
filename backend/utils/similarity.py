@@ -2,10 +2,13 @@ import os
 import torch
 import nltk
 import numpy as np
+from io import BytesIO
 from transformers import AutoTokenizer, AutoModel
 from nltk.tokenize import sent_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords as nltk_stopwords
 from sklearn.preprocessing import normalize
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import warnings
 warnings.filterwarnings('ignore')
@@ -141,3 +144,55 @@ def find_top_matching_pairs(embeddings1, embeddings2, indexed_chunks1, indexed_c
         matched_pairs.append(pair)
     
     return matched_pairs
+
+def get_TSNE(embeddings1, embeddings2):
+    combined_embeddings = np.vstack((embeddings1, embeddings2)) 
+    labels1 = ['Doc 1'] * embeddings1.shape[0]
+    labels2 = ['Doc 2'] * embeddings2.shape[0]
+    labels = labels1 + labels2 
+    color_map = { 'Doc 1': '#5EFEFE',
+                'Doc 2': '#E82F71' 
+                }
+    
+    tsne = TSNE(n_components=3, random_state=42, perplexity=17, n_iter=1000, init='random')
+    embeddings_3d = tsne.fit_transform(combined_embeddings)
+    fig = plt.figure(figsize=(10, 10), dpi=300)
+    fig.patch.set_facecolor('black')
+    ax = fig.add_subplot(111, projection='3d') 
+    ax.grid(color='red', linestyle='dashed', linewidth=0.5)
+    for label in color_map.keys(): 
+        idx = [i for i, l in enumerate(labels) if l == label] 
+        ax.scatter( embeddings_3d[idx, 0], 
+                embeddings_3d[idx, 1], 
+                embeddings_3d[idx, 2], 
+                c=color_map[label], 
+                label=label, 
+                alpha=0.6, 
+                s=50, 
+                edgecolors='w' )
+
+    ax.set_title('t-SNE Visualization', fontsize=16)
+    ax.set_xlabel('Semantic Space 1', fontsize=14)
+    ax.set_ylabel('Semantic Space 2', fontsize=12)
+    ax.set_zlabel('Semantic Space 3', fontsize=10)
+
+    ax.legend(loc='best')
+    ax.grid(True)
+    ax.set_facecolor('black')
+
+    ax.xaxis.label.set_color('white') 
+    ax.yaxis.label.set_color('white')  
+    ax.zaxis.label.set_color('white') 
+    ax.title.set_color('white')  
+
+    ax.tick_params(axis='x', colors='white')
+    ax.tick_params(axis='y', colors='white')
+    ax.tick_params(axis='z', colors='white')
+
+    plt.tight_layout()
+    buf = BytesIO()
+    plt.savefig(buf, format='png', bbox_inches='tight')
+    plt.close(fig)
+    buf.seek(0)
+
+    return buf.getvalue() 

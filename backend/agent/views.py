@@ -1,6 +1,8 @@
 import os
 import time
+import numpy as np
 from django.conf import settings
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,7 +13,8 @@ from pinecone import Pinecone
 from utils.similarity import (
     preprocess,
     generate_embeddings,
-    find_top_matching_pairs
+    find_top_matching_pairs,
+    get_TSNE
 )
 from utils.retriever import (
     get_documents,
@@ -36,6 +39,8 @@ indexed_chunks = []
 class Session:
     most_similar = None
     vector_store = None
+    embeddings = [] # matching pairs
+    tsne = None
     flag = True
 
 class FindSimilarity(APIView):
@@ -53,7 +58,7 @@ class FindSimilarity(APIView):
                                 batch_size=32
                             )
                         )
-                
+            Session.embeddings = [np.array(embeddings[0]),np.array(embeddings[1])]
             # current implementation for first 2 files only
             matching_pairs = find_top_matching_pairs(embeddings[0],embeddings[1],indexed_chunks[0],indexed_chunks[1])
             most_similar = list(map(lambda x : x, sorted(matching_pairs, key=lambda d:d['similarity_score'])))[-1]
@@ -97,3 +102,11 @@ class Retreival(APIView):
             "similarity_score":Session.most_similar['similarity_score']
         },
         status=status.HTTP_200_OK)
+    
+class TSNE(APIView):
+    def get(self, request):
+        visual = get_TSNE(Session.embeddings[0], Session.embeddings[1])
+        response = HttpResponse(visual, content_type='image/png')
+        response['Content-Disposition'] = 'inline; filename="inference_output.png"'
+
+        return response
