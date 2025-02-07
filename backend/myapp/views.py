@@ -8,25 +8,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from pinecone import Pinecone
 
-class PDFView(APIView):
+class NewSession(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        if 'files' not in request.FILES:
-            return Response({'error': 'No files uploaded'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        uploaded_files = []
-        for file in request.FILES.getlist('files'):
-            try:
-                file_upload = FileUpload.objects.create(file=file)
-                uploaded_files.append(FileUploadSerializer(file_upload).data)
-            except Exception as e:
-                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        return Response(uploaded_files, status=status.HTTP_201_CREATED)
-
-class CleanupSessionView(APIView):
-    def post(self, request):
         # Clear previous session's records from Pinecone
         pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
         index = pc.Index(os.environ.get("PINECONE_INDEX_NAME"))
@@ -47,7 +32,16 @@ class CleanupSessionView(APIView):
                 else:
                     print(f"Skipped (not a file): {file_path}")
 
-        return Response(
-            {"messsage":"Session cleared successfully"},
-            status=status.HTTP_200_OK
-        )
+        if 'files' not in request.FILES:
+            return Response({'error': 'No files uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        uploaded_files = []
+        for file in request.FILES.getlist('files'):
+            try:
+                file_upload = FileUpload.objects.create(file=file)
+                uploaded_files.append(FileUploadSerializer(file_upload).data)
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        uploaded_files.append({"messsage":"Previous session cleared successfully"})
+        
+        return Response(uploaded_files, status=status.HTTP_201_CREATED)
