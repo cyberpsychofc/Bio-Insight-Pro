@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Footer from './components/Footer.jsx';
 import ImageText from './components/ImageText.jsx';
-import ShinyText from './components/ui/ShinyText.jsx';
 import TitleCard from './components/TitleCard.jsx';
 import { useNavigate } from "react-router"
 
@@ -16,7 +15,7 @@ function App() {
   useEffect(() => {
     const handleScroll = () => {
       const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
-      setIsFixedDivVisible(window.scrollY > 890 && window.scrollY + 1000 <= footerTop);
+      setIsFixedDivVisible(window.scrollY > 1013 && window.scrollY + 1000 <= footerTop);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -67,7 +66,7 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <TitleCard />
-      <div className="flex-grow">
+      <div>
         <div className="relative flex items-center justify-center pt-10 px-5">
           <div
             className={`relative w-full max-w-5xl md:py-8 text-white rounded-lg shadow-lg transition-all duration-300 text-center
