@@ -1,7 +1,9 @@
 import React from 'react';
 import '../App.css';
-
+import { useLocation } from 'react-router';
 const Navbar = () => {
+  const location = useLocation();
+  /* console.log(location.pathname); */
   return (
     <nav
       className="text-white flex p-7 text-2xl justify-between bg-transparent sticky z-10 top-0 left-0 right-0 backdrop-blur-md"
@@ -28,13 +30,17 @@ const Navbar = () => {
       </a>
 
       <div className="text-xl text-gray-500 flex gap-9 mt-4">
-        {["Home", "Similarity", "About"].map((item, index) => (
-          <a key={index} href={`${item === "Home" ? "/" : item.toLowerCase()}`} className="relative group hover:text-white" aria-label={item}>
-            <span className="after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full">
-              {item}
-            </span>
-          </a>
-        ))}
+        {["Home", "Similarity", "About"].map((item, index) => {
+          const path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
+          const isActive = location.pathname === path;
+          return (
+            <a key={index} href={path} className={`relative group ${ isActive ? "text-white" : "hover:text-white"}`} aria-label={item}>
+              <span className={`after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 ${isActive ? "after:bg-cyan-300 after:duration-300 after:w-full" : "after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full"}`}>
+                {item}
+              </span>
+            </a>
+          )
+        })}
       </div>
 
       <div>
