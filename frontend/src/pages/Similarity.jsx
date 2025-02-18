@@ -3,6 +3,36 @@ import ShinyText from '../components/ui/ShinyText';
 import { useState, useEffect } from 'react';
 import { Markdown } from "../components/NonMemoizedMarkdown.jsx"
 
+const AnimatedNumber = ({ value }) => {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        let current = 0;
+        const duration = 1000; // Animation duration in milliseconds
+        const stepTime = 10; // Time interval for updating the number
+        const steps = duration / stepTime;
+        const increment = value / steps;
+
+        const interval = setInterval(() => {
+            current += increment;
+            if (current >= value) {
+                setCount(value);
+                clearInterval(interval);
+            } else {
+                setCount(Math.round(current)); // Round for better display
+            }
+        }, stepTime);
+
+        return () => clearInterval(interval);
+    }, [value]);
+
+    return (
+        <div className="mt-12 items-center justify-center flex text-8xl">
+            {count}
+        </div>
+    );
+};
+
 async function wait(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -19,7 +49,7 @@ export default function Similarity() {
         "Analyzing Results",
         "Extracting Insights",
         "Finalizing Analysis"
-    ];    
+    ];
 
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState({});
@@ -66,6 +96,7 @@ export default function Similarity() {
                     <Markdown>
                         {result.ModelResponse}
                     </Markdown>
+                    <AnimatedNumber value={result.similarity_score * 100} />
                 </div>
             </div>
         )}
