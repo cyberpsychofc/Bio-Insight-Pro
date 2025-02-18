@@ -2,6 +2,7 @@ import axios from "axios";
 import ShinyText from '../components/ui/ShinyText';
 import { useState, useEffect } from 'react';
 import { Markdown } from "../components/NonMemoizedMarkdown.jsx"
+import Footer from "../components/Footer.jsx"
 
 const AnimatedNumber = ({ value }) => {
     const [count, setCount] = useState(0);
@@ -83,11 +84,13 @@ export default function Similarity() {
         }
     }, [loadingText]);
 
-    return <div className="w-screen min-h-[85vh] flex items-center justify-start">
-        {isLoading ? (
-            <div className='w-full flex items-center justify-center p-10'>
-                <div className='w-2/3 -translate-y-60'>
-                    <ShinyText text={loadingText + '...'} disabled={false} speed={3} className="text-4xl" />
+    return <>
+        <div className="w-screen min-h-[85vh] flex items-center justify-start">
+            {isLoading ? (
+                <div className='w-full flex items-center justify-center p-10'>
+                    <div className='w-2/3 -translate-y-60'>
+                        <ShinyText text={loadingText + '...'} disabled={false} speed={3} className="text-4xl" />
+                    </div>
                 </div>
             </div>
         ) : (
@@ -98,7 +101,12 @@ export default function Similarity() {
                     </Markdown>
                     <AnimatedNumber value={result.similarity_score * 100} />
                 </div>
-            </div>
-        )}
-    </div>
+            )}
+
+
+        </div>
+        <div>
+            <Footer />
+        </div>
+    </>
 }

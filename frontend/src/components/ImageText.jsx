@@ -6,7 +6,9 @@ const ImageText = () => {
       <div className="flex flex-col md:flex-row items-center mt-20 text-base md:text-xl lg:text-2xl shadow rounded-lg p-4 lg:p-10 w-full h-full">
         {/* Image Section */}
         <div className="flex-shrink-0">
-          <img className="w-auto h-auto md:w-[300px] md:h-[300px] lg:w-[400px] lg:h-[400px] sm:w-[200px] sm:h-[200px]" src="src/assets/doc icon.png" alt="Doc Icon"/>
+          
+          <img className="w-auto h-auto md:w-[300px] md:h-[300px] lg:w-[400px] lg:h-[400px] sm:w-[200px] sm:h-[200px]" src="/doc icon.png" alt="Doc Icon"/>
+
         </div>
         {/* Text Section */}
         <div className="mt-4 md:ml-10 lg:ml-20 text-center md:text-left">
@@ -29,14 +31,18 @@ const ImageText = () => {
         </div>
         {/* Image Section */}
         <div className="flex-shrink-0 order-1 md:order-2">
-          <img className="w-auto h-auto md:w-[300px] md:h-[300px] lg:w-[600px] lg:h-[600px] sm:w-[200px] sm:h-[200px]" src="src/assets/dna.png" alt="DNA" />
+
+          <img className="w-auto h-auto md:w-[300px] md:h-[300px] lg:w-[600px] lg:h-[600px] sm:w-[200px] sm:h-[200px]" src="/dna.png" alt="DNA" />
+
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row items-center mt-10 text-base md:text-xl lg:text-2xl shadow rounded-lg p-4 lg:p-10 w-full h-full">
         {/* Image Section */}
         <div className="flex-shrink-0">
-          <img className="w-auto h-auto md:w-[300px] md:h-[300px] lg:w-[400px] lg:h-[400px] sm:w-[200px] sm:h-[200px]" src="src/assets/graph.png" alt="GRAPH" />
+
+          <img className="w-auto h-auto md:w-[300px] md:h-[300px] lg:w-[400px] lg:h-[400px] sm:w-[200px] sm:h-[200px]" src="/graph.png" alt="GRAPH" />
+
         </div>
         {/* Text Section */}
         <div className="mt-4 md:ml-10 lg:ml-20 text-center md:text-left">
