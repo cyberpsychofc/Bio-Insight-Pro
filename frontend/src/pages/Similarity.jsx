@@ -92,16 +92,16 @@ export default function Similarity() {
                         <ShinyText text={loadingText + '...'} disabled={false} speed={3} className="text-4xl" />
                     </div>
                 </div>
-            </div>
-        ) : (
-            <div className='w-full flex items-center justify-center p-10'>
-                <div className='w-2/3'>
-                    <Markdown>
-                        {result.ModelResponse}
-                    </Markdown>
-                    <AnimatedNumber value={result.similarity_score * 100} />
-                </div>
-            )}
+            ) : (
+                <div className='w-full flex items-center justify-center p-10'>
+                    <div className='w-2/3'>
+                        <Markdown>
+                            {result.ModelResponse}
+                        </Markdown>
+                        <AnimatedNumber value={result.similarity_score * 100} />
+                    </div>
+                    </div>
+                )}
 
 
         </div>
