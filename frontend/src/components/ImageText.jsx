@@ -8,7 +8,7 @@ const ImageText = () => {
       <div className="flex flex-col md:flex-row items-center mt-20 text-base md:text-xl lg:text-2xl shadow rounded-lg p-4 lg:p-10">
         {/* Image Section */}
         <div className="flex-shrink-0">
-          <img className="w-24 h-24 md:w-48 md:h-48 lg:w-96 lg:h-96" src="src/assets/doc icon.png" alt="Doc Icon" />
+          <img className="w-24 h-24 md:w-48 md:h-48 lg:w-96 lg:h-96" src="/doc icon.png" alt="Doc Icon" />
         </div>
         {/* Text Section */}
         <div className="mt-4 ml-60">
@@ -32,14 +32,14 @@ const ImageText = () => {
         </div>
         {/* Image Section */}
         <div className="flex-shrink-0 order-1 md:order-2">
-          <img className="w-[640px] h-[640px]" src="src/assets/dna.png" alt="DNA" />
+          <img className="w-[640px] h-[640px]" src="/dna.png" alt="DNA" />
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row items-center mt-10 text-base md:text-xl lg:text-2xl shadow rounded-lg p-4 lg:p-10">
         {/* Image Section */}
         <div className="flex-shrink-0">
-          <img className="w-[640px] h-[640px]" src="src/assets/graph.png" alt="GRAPH" />
+          <img className="w-[640px] h-[640px]" src="/graph.png" alt="GRAPH" />
         </div>
         {/* Text Section */}
         <div className="mt-4 ml-60">
