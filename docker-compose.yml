@@ -1,5 +1,5 @@
 services:
-# commented to run on-premises BACKEND and FRONTEND on VERCEL
+# commented to run on-premises BACKEND and FRONTEND on VERCEL, uncomment otherwise
   # frontend:
   #   build:
   #     context: ./frontend
