@@ -1,4 +1,3 @@
-import os
 import torch
 import nltk
 import numpy as np
@@ -15,19 +14,9 @@ warnings.filterwarnings('ignore')
 
 load_dotenv()
 
-nltk_data_path = os.path.join(os.getenv('APPDATA', ''), 'nltk_data')
-
-def ensure_nltk_resource(resource_name):
-    resource_path = os.path.join(nltk_data_path, resource_name)
-    if os.path.exists(resource_path):
-        print(f"Skipping download : {resource_name}")
-    else:
-        print(f"Downloading {resource_name}...")
-        nltk.download(resource_name, download_dir=nltk_data_path)
-
-ensure_nltk_resource('corpora/stopwords')
-ensure_nltk_resource('tokenizers/punkt')
-ensure_nltk_resource('tokenizers/punkt_tab')
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('punkt_tab')
 
 stop_words = set(nltk_stopwords.words('english'))
 # Loading BioBERT by DMIS-LABS from Huggingface's transformers package
