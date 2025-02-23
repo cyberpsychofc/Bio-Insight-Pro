@@ -1,17 +1,28 @@
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "5173:5173"  # Map localhost:5173 to React app port 5173
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+# commented to run on-premises BACKEND and FRONTEND on VERCEL
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5173:5173"  # Map localhost:5173 to React app port 5173
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #   stdin_open: true
+  #   tty: true
+
+  cloudfare:
+    container-name: tunnel
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
     environment:
-      - CHOKIDAR_USEPOLLING=true
-    stdin_open: true
-    tty: true
+      -TUNNEL_TOKEN=$TUNNEL_TOKEN
+    command: tunnel --no-autoupdate run
+    networks:
+      - backend
 
   backend:
     build:
@@ -25,3 +36,7 @@ services:
       - DEBUG=True # Set to False in Production
     stdin_open: true
     tty: true
+
+networks:
+  backend:
+    driver: bridge
