@@ -7,9 +7,9 @@ import Similarity from './pages/Similarity.jsx'
 
 createRoot(document.getElementById('root')).render(
   <>
-  
+
     <BrowserRouter>
-    <Navbar />
+      <Navbar />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/similarity" element={<Similarity />} />

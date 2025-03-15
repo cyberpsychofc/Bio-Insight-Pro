@@ -3,43 +3,9 @@ import ShinyText from '../components/ui/ShinyText';
 import { useState, useEffect } from 'react';
 import { Markdown } from "../components/NonMemoizedMarkdown.jsx"
 import Footer from "../components/Footer.jsx"
-
-const AnimatedNumber = ({ value }) => {
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-        let current = 0;
-        const duration = 1000; // Animation duration in milliseconds
-        const stepTime = 10; // Time interval for updating the number
-        const steps = duration / stepTime;
-        const increment = value / steps;
-
-        const interval = setInterval(() => {
-            current += increment;
-            if (current >= value) {
-                setCount(value);
-                clearInterval(interval);
-            } else {
-                setCount(Math.round(current)); // Round for better display
-            }
-        }, stepTime);
-
-        return () => clearInterval(interval);
-    }, [value]);
-
-    return (
-        <div className="mt-12 items-center justify-center flex text-8xl">
-            {count}
-        </div>
-    );
-};
-
-async function wait(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
+import AnimatedNumber from "../components/AnimatedNumber.jsx";
 
 export default function Similarity() {
-
     const [loadingText, setLoadingText] = useState("Thinking");
     const sampleText = [
         "Thinking",
@@ -85,7 +51,7 @@ export default function Similarity() {
     }, [loadingText]);
 
     return <>
-        <div className="w-screen min-h-[85vh] flex items-center justify-start">
+        <div className="min-h-[85vh] flex items-center justify-start">
             {isLoading ? (
                 <div className='w-full flex items-center justify-center p-10'>
                     <div className='w-2/3 -translate-y-60'>
@@ -100,10 +66,8 @@ export default function Similarity() {
                         </Markdown>
                         <AnimatedNumber value={result.similarity_score * 100} />
                     </div>
-                    </div>
-                )}
-
-
+                </div>
+            )}
         </div>
         <div>
             <Footer />

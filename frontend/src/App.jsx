@@ -116,9 +116,9 @@ function App() {
         {/* Uploaded Files Info */}
         <div className='flex items-center justify-center flex-col'>
           <div className="px-20 border-2 border-gray-700 w-2/3 py-5 mt-20 mx-20 mb-10 rounded-lg">
-            <h2 className="text-xl text-white mb-4 p-2 justify-center flex">Uploaded Files</h2>
+            <h2 className="text-xl text-white p-2 justify-center flex">Uploaded Files</h2><p className='text-gray-600 text-center mb-2'>Please upload at least 2 documents</p>
             {Array.from(localFiles).length === 0 ? (
-              <p className="text-white flex justify-center">No files uploaded</p>
+              <p className="text-white flex justify-center text-center">No files uploaded.</p>
             ) : (
               <ul>
                 {Array.from(localFiles).map((file, index) => (
