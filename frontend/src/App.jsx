@@ -5,7 +5,7 @@ import ImageText from './components/ImageText.jsx';
 import TitleCard from './components/TitleCard.jsx';
 import { useNavigate } from "react-router"
 
-function App() {
+export default function App() {
   const nav = useNavigate();
   const [isFixedDivVisible, setIsFixedDivVisible] = useState(false);
   const footerRef = useRef(null);
@@ -168,5 +168,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
