@@ -8,6 +8,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_pinecone import PineconeVectorStore
 from langchain_pinecone import PineconeEmbeddings
 from pinecone import Pinecone
+import asyncio
 
 os.environ["GROQ_API_KEY"]=os.getenv("GROQ_API_KEY")
 os.environ["PINECONE_API_KEY"]=os.getenv("PINECONE_API_KEY")
@@ -20,11 +21,6 @@ if index_name not in [i.name for i in pc.list_indexes().index_list["indexes"]]:
     pc.create_index(name=index_name, dimension=1024, metric="cosine")
 
 index = pc.Index(index_name)
-
-embeddings = PineconeEmbeddings(
-    model='multilingual-e5-large',
-    pinecone_api_key=os.environ.get('PINECONE_API_KEY')
-)
 
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size = 1024,
@@ -42,6 +38,17 @@ conversationally without giving any unnecessary non-medical context in 200 words
 Question: {input}
 """)
 
+def load_embedding_model():
+    loop = asyncio.new_event_loop() 
+    asyncio.set_event_loop(loop)
+    return loop.run_until_complete(_load_embeddings()) 
+
+async def _load_embeddings():
+    embeddings = PineconeEmbeddings(
+    model='multilingual-e5-large',
+    pinecone_api_key=os.environ.get('PINECONE_API_KEY'))
+
+    return embeddings
 
 def get_documents(text):
     chunks = text_splitter.split_documents(text_splitter.create_documents([text]))
@@ -52,6 +59,7 @@ def get_documents(text):
 
 # Pass the paths of all the files to be taken into account of context by the LLM
 def store_embeddings(*args):
+    embeddings = load_embedding_model()
     vector_store = PineconeVectorStore(embedding=embeddings)
 
     for file in args:
@@ -79,6 +87,7 @@ def retrieval_chain(llm, db):
     return retrieval_chain
 
 def load_original_documents(index, query):
+    embeddings = load_embedding_model()
     result = index.query(vector=embeddings.embed_query(query),
                         top_k=1,
                         include_values=False)['matches'][0]['id']

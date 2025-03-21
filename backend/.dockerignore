@@ -2,6 +2,5 @@
 .gitignore
 Dockerfile
 .dockerignore
-.env
 *.sqlite3
 __pycache__/
