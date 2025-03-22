@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'myapp',
     'agent',
     'corsheaders',
+    'bioinsight',
 ]
 
 MIDDLEWARE = [
