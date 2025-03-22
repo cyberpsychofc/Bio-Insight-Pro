@@ -12,14 +12,14 @@ export default function BioAlign() {
             <div className="grid items-center justify-center mt-20 text-center text-4xl text-gray-300">
                 Raw Sequence
                 <textarea
-                    className="lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[500px] xs:w-[100px] mx-auto text-white mt-5 rounded-md p-5 text-2xl mb-8 bg-gray-900 focus:outline-none focus:bg-transparent"
+                    className="lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[500px] xs:w-[100px] mx-auto text-white mt-5 rounded-md p-5 text-2xl mb-8 bg-gray-900 focus:outline-none"
                     rows="10"
                     value={text1}
                     onChange={(e) => setText1(e.target.value.toUpperCase())}
                 />
                 Target Sequence
                 <textarea
-                    className="lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[500px] xs:w-[100px] mx-auto text-white mt-5 rounded-md p-5 text-2xl bg-gray-900 focus:outline-none focus:bg-transparent"
+                    className="lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[500px] xs:w-[100px] mx-auto text-white mt-5 rounded-md p-5 text-2xl bg-gray-900 focus:outline-none"
                     rows="10"
                     value={text2}
                     onChange={(e) => setText2(e.target.value.toUpperCase())}
