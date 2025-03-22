@@ -43,10 +43,10 @@ export default function Navbar({ canAccessServices }) {
         </svg>
       </a>
 
-
       <div className="text-xl text-gray-500 flex gap-9 mt-4">
         {["Home", "Similarity", "BioAlign", "About"].map((item, index) => {
-          const path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
+          let path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
+          if (item === "BioAlign") path = "/align";
           const isActive = location.pathname === path;
           return (
             <Link key={index} to={path} className={`relative group ${isActive ? "text-white" : "hover:text-white"}`} aria-label={item} onClick={item === "Similarity" ? handleServiceClick : undefined}>
