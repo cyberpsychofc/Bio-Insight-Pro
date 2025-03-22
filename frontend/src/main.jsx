@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/similarity" element={<Similarity />} />
-        <Route path="/bioalign" element={<BioAlign />} />
+        <Route path="/align" element={<BioAlign />} />
       </Routes>
     </BrowserRouter>
   </>
