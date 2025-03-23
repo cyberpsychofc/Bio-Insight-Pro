@@ -44,7 +44,7 @@ export default function BioAlign() {
             <div className="grid items-center justify-center mt-20 text-center text-4xl text-gray-300">
                 Raw Sequence
                 <textarea
-                    className="lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[500px] xs:w-[100px] mx-auto text-white mt-5 rounded-md p-5 text-2xl mb-2 bg-gray-900 focus:outline-none [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none"
+                    className="lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[500px] xs:w-[100px] mx-auto text-white mt-5 rounded-md p-5 text-2xl mb-2 bg-gray-900 focus:outline-none [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none"
                     rows="10"
                     value={sequence1}
                     onChange={(e) => setSequence1(e.target.value.toUpperCase())}
@@ -57,7 +57,7 @@ export default function BioAlign() {
                 </div>
                 Target Sequence
                 <textarea
-                    className="lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[500px] xs:w-[100px] mx-auto text-white mt-5 rounded-md p-5 text-2xl mb-2 bg-gray-900 focus:outline-none [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none"
+                    className="lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[500px] xs:w-[100px] mx-auto text-white mt-5 rounded-md p-5 text-2xl mb-2 bg-gray-900 focus:outline-none [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none"
                     rows="10"
                     value={sequence2}
                     onChange={(e) => setSequence2(e.target.value.toUpperCase())}
@@ -79,15 +79,33 @@ export default function BioAlign() {
             >
                 Align
             </button>
-            <div className="mt-9 bg-gray-900 text-center items-center justify-center mb-20 mx-40 p-10 rounded-md text-white">
+            <div
+                className="mt-9 bg-gray-900 text-center items-center justify-center mb-20 mx-auto p-5 rounded-md text-lg text-white [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[400px] xs:w-[200px]"
+                style={{
+                    maxHeight: "70vh", // Use relative height for responsiveness
+                    overflowY: "auto", // Vertical scrollbar for overflowing content
+                }}
+            >
+                <p className="text-2xl font-semibold mb-5 ">Alignments</p>
+                <hr className="my-4 border-gray-700" />
                 {result.alignments && result.alignments.length > 0 ? (
                     result.alignments.map((a, index) => (
                         <div key={index} className="mb-6">
                             <h2 className="text-lg font-semibold mb-2">Alignment {index + 1}</h2>
-                            <p>{a.sequence1 || "N/A"}</p>
-                            {a.alignment || "N/A"}
-                            <p>{a.sequence2 || "N/A"}</p>
-                            <p><strong>Score:</strong> {result.scores ? result.scores[index] : "N/A"}</p>
+                            <p className="mb-8">Score: {result.scores[index]}</p>
+                            <div
+                                className="border-2 py-8 px-5 rounded-md border-gray-800 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+                                style={{ // Relative width for responsiveness
+                                    maxWidth: "1300px", // Maximum width limit
+                                    whiteSpace: "nowrap", // Prevent wrapping of text
+                                    overflowX: "auto", // Horizontal scrollbar for overflow
+                                    margin: "0 auto", // Center horizontally
+                                }}
+                            >
+                                <pre>{a.sequence1 || "N/A"}</pre>
+                                <pre>{a.alignment || "N/A"}</pre>
+                                <pre>{a.sequence2 || "N/A"}</pre>
+                            </div>
                             <hr className="my-4 border-gray-700" />
                         </div>
                     ))
