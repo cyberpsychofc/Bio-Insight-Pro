@@ -9,5 +9,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('myapp.urls')),
     path('agent/',include('agent.urls')),
-    path('api/', include('bioinsight.urls')), 
+    path('seq/', include('bioinsight.urls')), 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

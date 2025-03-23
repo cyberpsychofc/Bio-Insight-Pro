@@ -8,6 +8,7 @@ langchain
 langchain-pinecone
 langchain-community
 langchain-groq
+langchain_openai
 matplotlib
 numpy
 pinecone
@@ -16,5 +17,6 @@ pypdf
 scikit-learn
 transformers
 Bio
-
+langchain-experimental 
+neo4j
 # (torch w/ cuda) pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118

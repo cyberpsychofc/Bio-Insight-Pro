@@ -1,5 +1,5 @@
 services:
-# commented to run on-premises BACKEND and FRONTEND on VERCEL, uncomment otherwise
+# commented to run AWS BACKEND and FRONTEND on VERCEL, uncomment otherwise
   # frontend:
   #   build:
   #     context: ./frontend
@@ -13,17 +13,6 @@ services:
   #     - CHOKIDAR_USEPOLLING=true
   #   stdin_open: true
   #   tty: true
-
-  cloudfare:
-    container-name: tunnel
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    environment:
-      -TUNNEL_TOKEN=$TUNNEL_TOKEN
-    command: tunnel --no-autoupdate run
-    networks:
-      - backend
-
   backend:
     build:
       context: ./backend

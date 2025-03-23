@@ -6,10 +6,12 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 from pypdf import PdfReader
 from pinecone import Pinecone
+from neo4j import GraphDatabase
 
+from utils.ner import perform_ner
 from utils.similarity import (
     preprocess,
     generate_embeddings,
@@ -23,7 +25,12 @@ from utils.retriever import (
     load_original_documents
 )
 
-llm = ChatGroq(model="llama3-8b-8192") # Loading LLM agent
+os.environ["NEO4J_URI"] = os.environ.get("NEO4J_URI")
+os.environ["NEO4J_USERNAME"] = os.environ.get("NEO4J_USERNAME")
+os.environ["NEO4J_PASSWORD"] = os.environ.get("NEO4J_PASSWORD")
+
+llm = ChatOpenAI(
+    model="gpt-4o-mini") # Loading LLM agent
 # Vector DB
 pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
 index = pc.Index(os.environ.get("PINECONE_INDEX_NAME"))
@@ -35,6 +42,9 @@ Portions 1 : {} and Portions 2 : {}.
 PATH = os.path.join(settings.STATICFILES_DIRS[0], 'uploads')
 embeddings = []
 indexed_chunks = []
+neo4jdriver = GraphDatabase.driver(
+    os.environ["NEO4J_URI"], 
+    auth=(os.environ["NEO4J_USERNAME"], os.environ["NEO4J_PASSWORD"]))
 
 class Session:
     most_similar = None
@@ -42,6 +52,10 @@ class Session:
     embeddings = [] # matching pairs
     tsne = None
     flag = True
+
+def create_database(driver, db_name):
+    with driver.session(database="system") as session:
+        session.run(f"CREATE DATABASE {db_name}")
 
 class FindSimilarity(APIView):
     def post(self, request):
@@ -110,3 +124,17 @@ class TSNE(APIView):
         response['Content-Disposition'] = 'inline; filename="inference_output.png"'
 
         return response
+    
+class NERView(APIView):
+    def post(self, request, index):
+        files = [entry.name for entry in os.scandir(PATH) if entry.is_file()]
+        if index < 1 or index > len(files):
+            return Response({"error": "invalid index"}, status=status.HTTP_400_BAD_REQUEST)
+        # creates database
+        create_database(neo4jdriver, files[index-1][:(len(files[index-1]))-4])
+        
+        processed_corpus = preprocess(PdfReader(PATH + '/' + files[index-1]))
+        # create graph-db
+        perform_ner(files[index-1][:(len(files[0]))-4], processed_corpus)
+        
+        return Response({"message":"success"},status=status.HTTP_201_CREATED)

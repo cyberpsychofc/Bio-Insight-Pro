@@ -20,8 +20,8 @@ nltk.download('punkt_tab')
 
 stop_words = set(nltk_stopwords.words('english'))
 # Loading BioBERT by DMIS-LABS from Huggingface's transformers package
-MODEL = AutoModel.from_pretrained("dmis-lab/biobert-large-cased-v1.1")
-TOKENIZER = AutoTokenizer.from_pretrained("dmis-lab/biobert-large-cased-v1.1")
+MODEL = AutoModel.from_pretrained("dmis-lab/biobert-v1.1")
+TOKENIZER = AutoTokenizer.from_pretrained("dmis-lab/biobert-v1.1")
 # Check if CUDA is available for GPU processing
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 MODEL= MODEL.to(device)
@@ -44,37 +44,34 @@ def preprocess(file):
 
     return doc_final
 
-def get_embedding(text):
+# batch-processing
+def get_embedding(text): 
     encoded_input = TOKENIZER(
         text, 
         padding=True, 
         truncation=True, 
         max_length=512, 
         return_tensors='pt'
-    )
-
-    encoded_input = {key : val.to(device) for key, val in encoded_input.items()}
+    ).to(device)
 
     with torch.no_grad():
         model_output = MODEL(**encoded_input)
-    
-    last_hidden_state = model_output.last_hidden_state
 
+    last_hidden_state = model_output.last_hidden_state
     attention_mask = encoded_input['attention_mask']
 
     # Mean-pooling
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(last_hidden_state.size()).float()
-    sum_embeddings = torch.sum(last_hidden_state * input_mask_expanded, dim = 1)
-    sum_mask = torch.clamp(input_mask_expanded.sum(dim=1),min=1e-9)
+    sum_embeddings = torch.sum(last_hidden_state * input_mask_expanded, dim=1)
+    sum_mask = torch.clamp(input_mask_expanded.sum(dim=1), min=1e-9)
     mean_pooled = sum_embeddings / sum_mask
 
-    embedding = mean_pooled.cpu().numpy()
-    return embedding
+    return mean_pooled.cpu().numpy()  # Move to CPU before converting to NumPy
 
-# batch-processing
-def generate_embeddings(indexed_chunks, batch_size = 32):
+
+# Batch processing for embeddings
+def generate_embeddings(indexed_chunks, batch_size=64):  # Increased batch size for efficiency
     embeddings = []
-
     total_chunks = len(indexed_chunks)
 
     for start_idx in range(0, total_chunks, batch_size):
@@ -97,14 +94,15 @@ def generate_embeddings(indexed_chunks, batch_size = 32):
 
         # Mean-pooling
         input_mask_expanded = attention_mask.unsqueeze(-1).expand(last_hidden_state.size()).float()
-        sum_embeddings = torch.sum(last_hidden_state * input_mask_expanded, dim = 1)
-        sum_mask = torch.clamp(input_mask_expanded.sum(dim=1),min=1e-9)
+        sum_embeddings = torch.sum(last_hidden_state * input_mask_expanded, dim=1)
+        sum_mask = torch.clamp(input_mask_expanded.sum(dim=1), min=1e-9)
         mean_pooled = sum_embeddings / sum_mask
 
-        batch_embeddings = mean_pooled.cpu().numpy()
+        batch_embeddings = mean_pooled.cpu().numpy()  # Move to CPU before conversion
         embeddings.extend(batch_embeddings)
-        print(f"Processed Batch : {start_idx // batch_size + 1} / {np.ceil(total_chunks/batch_size)}")
-        
+
+        print(f"Processed Batch: {start_idx // batch_size + 1} / {np.ceil(total_chunks / batch_size)}")
+
     return embeddings
 
 def find_top_matching_pairs(embeddings1, embeddings2, indexed_chunks1, indexed_chunks2):

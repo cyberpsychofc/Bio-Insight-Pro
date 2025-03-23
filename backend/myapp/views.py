@@ -6,7 +6,12 @@ from .serializers import FileUploadSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
+from neo4j import GraphDatabase
 from pinecone import Pinecone
+
+neo4jdriver = GraphDatabase.driver(
+    os.environ["NEO4J_URI"], 
+    auth=(os.environ["NEO4J_USERNAME"], os.environ["NEO4J_PASSWORD"]))
 
 class NewSession(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -16,6 +21,15 @@ class NewSession(APIView):
         pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
         index = pc.Index(os.environ.get("PINECONE_INDEX_NAME"))
         stats = index.describe_index_stats()
+        # Clear Graph DB
+        with neo4jdriver.session() as session:
+            # Retrieve the list of databases
+            result = session.run("SHOW DATABASES")
+            databases = [record["name"] for record in result]
+            for db in databases:
+                if db.lower() not in ["system", "neo4j"]:
+                    # Drop each database except 'system' and 'neo4j'
+                    session.run(f"DROP DATABASE {db} IF EXISTS")
         # Check if any namespaces exist
         if "namespaces" in stats and stats["namespaces"]:
             index.delete(delete_all=True)
