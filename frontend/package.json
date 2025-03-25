@@ -10,11 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "3d-force-graph": "^1.77.0",
     "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "fs": "^0.0.1-security",
     "katex": "^0.16.21",
+    "neo4j-driver": "^5.28.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-dropzone": "^14.3.5",
+    "react-helmet": "^6.1.0",
     "react-katex": "^3.0.1",
     "react-markdown": "^9.0.3",
     "react-router": "^7.1.5",
@@ -25,7 +30,8 @@
     "remark-math": "^6.0.0",
     "remark-mdx": "^3.1.0",
     "remark-parse": "^11.0.0",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

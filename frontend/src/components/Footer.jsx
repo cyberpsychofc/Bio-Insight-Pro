@@ -2,8 +2,6 @@ import React from 'react';
 
 const Footer = React.forwardRef((_, ref) => {
   return (
-
-
     <footer class="bg-gray-900">
       <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div class="md:flex md:justify-between">

@@ -1,7 +1,7 @@
 import React from 'react'
 import '../App.css'
 
-const TitleCard = () => {
+export default function TitleCard () {
     return (
         <div className="mt-60 mb-40 px-10 py-16 relative justify-center">
             <div className="text-9xl neon-text justify-center">
@@ -14,5 +14,3 @@ const TitleCard = () => {
         </div>
     )
 }
-
-export default TitleCard
