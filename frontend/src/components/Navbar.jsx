@@ -45,7 +45,7 @@ export default function Navbar({ canAccessServices }) {
       </a>
 
       <div className="text-xl text-gray-500 flex gap-9 mt-4">
-  {["Home", "About", "Similarity", "BioAlign"].map((item, index) => {
+  {["Home", "About", "Similarity", "BioAlign", "Services"].map((item, index) => {
     let path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
     if (item === "BioAlign") path = "/align";
     const isActive = location.pathname === path;

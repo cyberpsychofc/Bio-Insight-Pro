@@ -18,7 +18,7 @@ export default function BioAlign() {
 
     async function handleAlignResponse(sequence1, sequence2) {
         try {
-            const response = await fetch("http://localhost:8000/api/align/", {
+            const response = await fetch("http://localhost:8000/seq/align", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default function BioAlign() {
                 Align
             </button>
             <div
-                className="mt-9 bg-gray-900 text-center items-center justify-center mb-20 mx-auto p-5 rounded-md text-lg text-white [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[400px] xs:w-[200px]"
+                className="mt-9 bg-gray-950 text-center items-center justify-center mb-20 mx-auto p-5 rounded-md text-lg text-white [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[400px] xs:w-[200px]"
                 style={{
                     maxHeight: "70vh", // Use relative height for responsiveness
                     overflowY: "auto", // Vertical scrollbar for overflowing content

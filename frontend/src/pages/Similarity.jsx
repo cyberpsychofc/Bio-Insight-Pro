@@ -66,8 +66,16 @@ export default function Similarity() {
                         </Markdown>
                         <AnimatedNumber value={result.similarity_score * 100} />
                     </div>
+                    <button
+                        className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-60"
+                    >
+                        Knowledge Graph
+                    </button>
                 </div>
             )}
+        </div>
+        <div>
+
         </div>
         <div>
             <Footer />

@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router';
 import App from './App.jsx'
 import Similarity from './pages/Similarity.jsx'
 import BioAlign from './pages/BioAlign.jsx';
+import Services from './pages/Services.jsx';
 
 createRoot(document.getElementById('root')).render(
   <>
@@ -14,6 +15,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<App />} />
         <Route path="/similarity" element={<Similarity />} />
         <Route path="/align" element={<BioAlign />} />
+        <Route path="/services" element={<Services />} />
       </Routes>
     </BrowserRouter>
   </>
