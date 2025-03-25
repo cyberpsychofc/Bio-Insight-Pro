@@ -96,26 +96,55 @@ class FindSimilarity(APIView):
     
 class Retreival(APIView):
     def get(self, request):
-        # Wait for Embeddings to get stored on Pinecone
-        time.sleep(10)
-        
-        firstportion = load_original_documents(index, Session.most_similar['left_chunk'])
-        secondportion = load_original_documents(index, Session.most_similar['left_chunk'])
-        # Add to the LLM's chain of thought
-        chain_of_thought = retrieval_chain(
-            llm, 
-            Session.vector_store
-        )
-        
-        response = chain_of_thought.invoke({
-            'input': PORTIONS.format(firstportion, secondportion)
-            })
+        try:
+            # Wait for Embeddings to get stored on Pinecone
+            time.sleep(10)
+            
+            firstportion = load_original_documents(index, Session.most_similar['left_chunk'])
+            secondportion = load_original_documents(index, Session.most_similar['left_chunk'])
+            # Add to the LLM's chain of thought
+            chain_of_thought = retrieval_chain(
+                llm, 
+                Session.vector_store
+            )
+            
+            response = chain_of_thought.invoke({
+                'input': PORTIONS.format(firstportion, secondportion)
+                })
 
-        return Response({
-            "ModelResponse": response['answer'],
-            "similarity_score":Session.most_similar['similarity_score']
-        },
-        status=status.HTTP_200_OK)
+            return Response({
+                "ModelResponse": response['answer'],
+                "similarity_score":Session.most_similar['similarity_score']
+            },
+            status=status.HTTP_200_OK)
+        except Exception as e:
+            print("Embeddings not found, retrying!")
+            time.sleep(5)
+            # Retry
+            try:
+                firstportion = load_original_documents(index, Session.most_similar['left_chunk'])
+                secondportion = load_original_documents(index, Session.most_similar['left_chunk'])
+                # Add to the LLM's chain of thought
+                chain_of_thought = retrieval_chain(
+                    llm, 
+                    Session.vector_store
+                )
+                response = chain_of_thought.invoke({
+                'input': PORTIONS.format(firstportion, secondportion)
+                })
+                return Response({
+                    "ModelResponse": response['answer'],
+                    "similarity_score":Session.most_similar['similarity_score']
+                },
+                status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({
+                    "ModelResponse": "Similarity match failed, Please retry!",
+                    "similarity_score":0.00
+                },
+                status=status.HTTP_200_OK)
+
+
     
 class TSNE(APIView):
     def get(self, request):
