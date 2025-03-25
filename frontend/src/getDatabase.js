@@ -1,8 +1,8 @@
 import neo4j from "neo4j-driver";
 
-const NEO4J_URI = "bolt://localhost:7687";
-const NEO4J_USERNAME = "neo4j";
-const NEO4J_PASSWORD = "bioinsightpro";
+export const NEO4J_URI = import.meta.env.VITE_NEO4J_URI;
+export const NEO4J_USERNAME = import.meta.env.VITE_NEO4J_USERNAME;
+export const NEO4J_PASSWORD = import.meta.env.VITE_NEO4J_PASSWORD;
 
 const driver = neo4j.driver(NEO4J_URI, neo4j.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD), { encrypted: false });
 
