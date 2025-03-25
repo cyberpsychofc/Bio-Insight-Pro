@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ImageText = () => {
+export default function ImageText () {
   return (
     <>
       <div className="flex flex-col md:flex-row items-center mt-20 text-base md:text-xl lg:text-2xl shadow rounded-lg p-4 lg:p-10 w-full h-full">
@@ -56,5 +56,3 @@ const ImageText = () => {
     </>
   );
 }
-
-export default ImageText;

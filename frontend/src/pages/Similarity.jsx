@@ -81,9 +81,6 @@ export default function Similarity() {
             )}
         </div>
         <div>
-
-        </div>
-        <div>
             <Footer />
         </div>
     </>

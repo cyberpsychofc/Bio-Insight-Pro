@@ -1,10 +1,10 @@
 import neo4j from "neo4j-driver";
 
 const NEO4J_URI = "bolt://localhost:7687";
-const NEO4J_USER = "neo4j";
+const NEO4J_USERNAME = "neo4j";
 const NEO4J_PASSWORD = "bioinsightpro";
 
-const driver = neo4j.driver(NEO4J_URI, neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD), { encrypted: false });
+const driver = neo4j.driver(NEO4J_URI, neo4j.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD), { encrypted: false });
 
 // Fetch available databases
 export const getDatabases = async () => {

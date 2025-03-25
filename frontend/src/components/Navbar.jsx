@@ -3,6 +3,7 @@ import '../App.css';
 import { useLocation, Link, useNavigate } from 'react-router';
 import alignIcon from "/align.svg";
 import graphIcon from "/graph.svg"
+
 export default function Navbar({ canAccessServices }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -46,50 +47,49 @@ export default function Navbar({ canAccessServices }) {
       </a>
 
       <div className="text-xl text-gray-500 flex gap-9 mt-4">
-  {["Home", "About", "Similarity", "BioAlign", "Services"].map((item, index) => {
-    let path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
-    if (item === "BioAlign") path = "/align";
-    const isActive = location.pathname === path;
+        {["Home", "About", "Similarity", "BioAlign", "Services"].map((item, index) => {
+          let path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
+          if (item === "BioAlign") path = "/align";
+          const isActive = location.pathname === path;
 
-    return (
-      <div className="flex items-center gap-2" key={index}>
-        <Link
-          to={path}
-          className={`relative group ${isActive ? "text-white" : "hover:text-white"}`}
-          aria-label={item}
-          onClick={item === "Similarity" ? handleServiceClick : undefined}
-        >
-          <span
-            className={`after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 ${
-              isActive
-                ? "after:bg-cyan-300 after:duration-300 after:w-full"
-                : "after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full"
-            }`}
-          >
-            {item}
-          </span>
-        </Link>
-        {/* Add content after BioAlign */}
-        {item === "BioAlign" && (
-          <img
-          src={alignIcon}
-          alt="Align Icon"
-          className="w-6 h-6" // Adjust size to fit your design
-          color='white'
-        />
-        )}
-        {item === "Services" && (
-          <img
-          src={graphIcon}
-          alt="Graph Icon"
-          className="w-6 h-6" // Adjust size to fit your design
-          color='white'
-        />
-        )}
+          return (
+            <div className="flex items-center gap-2" key={index}>
+              <Link
+                to={path}
+                className={`relative group ${isActive ? "text-white" : "hover:text-white"}`}
+                aria-label={item}
+                onClick={item === "Similarity" ? handleServiceClick : undefined}
+              >
+                <span
+                  className={`after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 ${isActive
+                      ? "after:bg-cyan-300 after:duration-300 after:w-full"
+                      : "after:bg-cyan-300 after:transition-all after:duration-300 group-hover:after:w-full"
+                    }`}
+                >
+                  {item}
+                </span>
+              </Link>
+              {/* Add content after BioAlign */}
+              {item === "BioAlign" && (
+                <img
+                  src={alignIcon}
+                  alt="Align Icon"
+                  className="w-6 h-6" // Adjust size to fit your design
+                  color='white'
+                />
+              )}
+              {item === "Services" && (
+                <img
+                  src={graphIcon}
+                  alt="Graph Icon"
+                  className="w-6 h-6" // Adjust size to fit your design
+                  color='white'
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
 
       <div>
         <button className="hidden bg-cyan-300 rounded p-3 mr-2 text-black font-semibold text-base shadow-[0_0_10px_#22d3ee] transition-all duration-300 hover:bg-transparent hover:text-cyan-300 hover:shadow-[0_0_10px_#000000] focus:ring focus:outline-none">
