@@ -4,6 +4,7 @@ import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPa
 import Footer from "../components/Footer";
 import DatabaseTabs from "../components/DatabaseTabs";
 import { getGraphData } from "../getDatabase.js";
+import { Helmet } from "react-helmet";
 
 export default function Services() {
   const graphRef = useRef(null);
@@ -22,7 +23,7 @@ export default function Services() {
     if (graphRef.current) {
       if (!graphInstance.current) {
         graphInstance.current = ForceGraph3D()(graphRef.current)
-          .backgroundColor("#000000");
+          .backgroundColor("#000000").width(1800);
 
         // Add Bloom Effect
         const bloomPass = new UnrealBloomPass();
@@ -42,6 +43,11 @@ export default function Services() {
 
   return (
     <>
+      <Helmet>
+        <title>
+          Services | BioInsightPro
+        </title>
+      </Helmet>
       <DatabaseTabs onSelectDatabase={setSelectedDatabase} />
       <div className="grid justify-center w-auto">
         <div ref={graphRef} />

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Markdown } from "../components/NonMemoizedMarkdown.jsx"
 import Footer from "../components/Footer.jsx"
 import AnimatedNumber from "../components/AnimatedNumber.jsx";
+import { Helmet } from "react-helmet";
 
 export default function Similarity() {
     const [loadingText, setLoadingText] = useState("Thinking");
@@ -51,6 +52,11 @@ export default function Similarity() {
     }, [loadingText]);
 
     return <>
+        <Helmet>
+            <title>
+                Similarity | BioInsightPro
+            </title>
+        </Helmet>
         <div className="min-h-[85vh] flex items-center justify-start">
             {isLoading ? (
                 <div className='w-full flex items-center justify-center p-10'>
@@ -60,17 +66,17 @@ export default function Similarity() {
                 </div>
             ) : (
                 <div className='w-full flex items-center justify-center p-10'>
-                    <div className='w-2/3'>
+                    <div className='w-2/3 mt-32 grid'>
                         <Markdown>
                             {result.ModelResponse}
                         </Markdown>
                         <AnimatedNumber value={result.similarity_score * 100} />
+                        <button
+                            className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-16"
+                        >
+                            Knowledge Graph
+                        </button>
                     </div>
-                    <button
-                        className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-60"
-                    >
-                        Knowledge Graph
-                    </button>
                 </div>
             )}
         </div>

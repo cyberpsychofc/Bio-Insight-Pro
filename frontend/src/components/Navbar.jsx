@@ -2,6 +2,7 @@ import React from 'react';
 import '../App.css';
 import { useLocation, Link, useNavigate } from 'react-router';
 import alignIcon from "/align.svg";
+import graphIcon from "/graph.svg"
 export default function Navbar({ canAccessServices }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,6 +74,14 @@ export default function Navbar({ canAccessServices }) {
           <img
           src={alignIcon}
           alt="Align Icon"
+          className="w-6 h-6" // Adjust size to fit your design
+          color='white'
+        />
+        )}
+        {item === "Services" && (
+          <img
+          src={graphIcon}
+          alt="Graph Icon"
           className="w-6 h-6" // Adjust size to fit your design
           color='white'
         />

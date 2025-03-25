@@ -30,7 +30,7 @@ export default function DatabaseTabs({ onSelectDatabase }) {
             <button
               className={`inline-block p-4 border-b-2 rounded-t-lg ${
                 activeDb === db
-                  ? "border-blue-500 text-blue-500"
+                  ? "border-cyan-300 text-cyan-300"
                   : "hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
               }`}
               type="button"
