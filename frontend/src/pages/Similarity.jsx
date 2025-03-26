@@ -44,10 +44,6 @@ export default function Similarity() {
             setResult(fetchResponse.data);
             localStorage.setItem('similarityResult', JSON.stringify(fetchResponse.data)); // Persist result
             isAnalysed = true;
-            if (isAnalysed) {
-                localStorage.setItem('similarityResult', JSON.stringify(fetchResponse.data));
-                console.log('Response stored in localStorage:', fetchResponse.data);
-            }
         } catch (error) {
             console.error('Error:', error);
         } finally {

@@ -7,6 +7,8 @@ import { useNavigate } from "react-router"
 import { Helmet } from 'react-helmet';
 import { resetIsAnalysed } from './pages/Similarity.jsx';
 
+export let filesSize = 0;
+
 export default function App() {
   const nav = useNavigate();
   const [isFixedDivVisible, setIsFixedDivVisible] = useState(false);
@@ -27,6 +29,7 @@ export default function App() {
   const handleFileUpload = (files) => {
     resetIsAnalysed();
     if (files.length > 0) {
+      filesSize = files.length;
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
