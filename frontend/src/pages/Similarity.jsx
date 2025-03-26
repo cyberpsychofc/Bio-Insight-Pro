@@ -5,6 +5,8 @@ import { Markdown } from "../components/NonMemoizedMarkdown.jsx";
 import Footer from "../components/Footer.jsx";
 import AnimatedNumber from "../components/AnimatedNumber.jsx";
 import { Helmet } from "react-helmet";
+import { filesSize } from "../App.jsx";
+import { useNavigate } from "react-router";
 
 // Global variable
 export let isAnalysed = false;
@@ -14,6 +16,7 @@ export function resetIsAnalysed() {
 }
 
 export default function Similarity() {
+    const navigate = useNavigate();
     const [loadingText, setLoadingText] = useState("Thinking");
     const sampleText = [
         "Thinking",
@@ -51,10 +54,31 @@ export default function Similarity() {
         }
     };
 
+    async function handleKnowledgeGraph() {
+        console.log('Creating Graphs...');
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        for (let i = 1; i <= filesSize; i++) {
+            try {
+                console.log(`Creating Graph for file ${i} ...`);
+                const response = await axios.post(`http://localhost:8000/agent/ner/${i}/create-graph`);
+                console.log(`Graph created for file ${i}`, response.message);
+
+                await delay(10000);
+
+            } catch (error) {
+                console.error(`Error creating graph for file ${i}:`, error);
+            }
+        }
+        console.log('All graphs created successfully.');
+        navigate('/biomap');
+    }
+
     useEffect(() => {
         if (!isAnalysed) {
             handleAnalyze();
-        }    
+        }
     }, []);
 
     useEffect(() => {
@@ -96,6 +120,7 @@ export default function Similarity() {
                         <AnimatedNumber value={result.similarity_score * 100} />
                         <button
                             className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-16"
+                            onClick={handleKnowledgeGraph}
                         >
                             Knowledge Graph
                         </button>

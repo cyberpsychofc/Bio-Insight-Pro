@@ -10,14 +10,15 @@ export default function Services() {
   const graphRef = useRef(null);
   const graphInstance = useRef(null);
   const [selectedDatabase, setSelectedDatabase] = useState("");
+  const [responses, setResponses] = useState([]);
 
   useEffect(() => {
     if (selectedDatabase) {
       loadData(selectedDatabase);
     }
-  }, [selectedDatabase]); // Reload graph when database changes
+  }, [selectedDatabase]);
 
-  const loadData = async (database) => {
+  async function loadData(database) {
     const { nodes, links } = await getGraphData(database);
 
     if (graphRef.current) {
@@ -39,13 +40,13 @@ export default function Services() {
         .linkDirectionalParticles(4)
         .linkDirectionalParticleSpeed(1);
     }
-  };
+  }
 
   return (
     <>
       <Helmet>
         <title>
-          Services | BioInsightPro
+          BioMap | BioInsightPro
         </title>
       </Helmet>
       <DatabaseTabs onSelectDatabase={setSelectedDatabase} />
