@@ -29,11 +29,6 @@ export default function App() {
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
       }
-
-
-
-
-
       axios.post('http://localhost:8000/api/upload/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
