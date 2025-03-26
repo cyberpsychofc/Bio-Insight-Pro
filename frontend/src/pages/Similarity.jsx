@@ -1,10 +1,13 @@
 import axios from "axios";
 import ShinyText from '../components/ui/ShinyText';
 import { useState, useEffect } from 'react';
-import { Markdown } from "../components/NonMemoizedMarkdown.jsx"
-import Footer from "../components/Footer.jsx"
+import { Markdown } from "../components/NonMemoizedMarkdown.jsx";
+import Footer from "../components/Footer.jsx";
 import AnimatedNumber from "../components/AnimatedNumber.jsx";
 import { Helmet } from "react-helmet";
+
+// Global variable
+export let isAnalysed = false;
 
 export default function Similarity() {
     const [loadingText, setLoadingText] = useState("Thinking");
@@ -21,35 +24,55 @@ export default function Similarity() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState({});
+
     const handleAnalyze = async () => {
         setIsLoading(true);
+        isAnalysed = false; // Reset state
+        localStorage.removeItem('similarityResult'); // Clear localStorage
+
         try {
             const analyzeResponse = await axios.post('http://localhost:8000/agent/similarity/predict');
             console.log('Analyze Response:', analyzeResponse.data);
 
             const fetchResponse = await axios.get('http://localhost:8000/agent/similarity/fetch');
             console.log('Fetch Response:', fetchResponse.data);
-            // await wait(5000);
+
             setResult(fetchResponse.data);
+            localStorage.setItem('similarityResult', JSON.stringify(fetchResponse.data)); // Persist result
+            isAnalysed = true;
+            if (isAnalysed) {
+                localStorage.setItem('similarityResult', JSON.stringify(fetchResponse.data));
+                console.log('Response stored in localStorage:', fetchResponse.data);
+            }
         } catch (error) {
             console.error('Error:', error);
         } finally {
             setIsLoading(false);
         }
     };
+
     useEffect(() => {
-        handleAnalyze();
+        if (!isAnalysed) {
+            handleAnalyze();
+        }    
     }, []);
 
     useEffect(() => {
-        const newText = sampleText[(sampleText.indexOf(loadingText) + 1) % sampleText.length]
+        const newText = sampleText[(sampleText.indexOf(loadingText) + 1) % sampleText.length];
         const time = setTimeout(() => {
             setLoadingText(newText);
         }, [3000]);
         return () => {
             clearInterval(time);
-        }
+        };
     }, [loadingText]);
+
+    useEffect(() => {
+        const storedResult = localStorage.getItem('similarityResult');
+        if (storedResult) {
+            setResult(JSON.parse(storedResult));
+        }
+    }, []);
 
     return <>
         <Helmet>
@@ -84,4 +107,4 @@ export default function Similarity() {
             <Footer />
         </div>
     </>
-}
+};

@@ -3,19 +3,11 @@ import '../App.css';
 import { useLocation, Link, useNavigate } from 'react-router';
 import alignIcon from "/align.svg";
 import graphIcon from "/graph.svg"
+import { isAnalysed } from '../pages/Similarity';
 
-export default function Navbar({ canAccessServices }) {
+export default function Navbar() {
   const location = useLocation();
-  const navigate = useNavigate();
   /* console.log(location.pathname); */
-
-  const handleServiceClick = (event) => {
-    if (!canAccessServices) {
-      event.preventDefault();
-      alert('Please analyze documents');// Prevents navigation
-      navigate(location.pathname); // Stay on the current page
-    }
-  };
 
   return (
     <nav
@@ -58,7 +50,6 @@ export default function Navbar({ canAccessServices }) {
                 to={path}
                 className={`relative group ${isActive ? "text-white" : "hover:text-white"}`}
                 aria-label={item}
-                onClick={item === "Similarity" ? handleServiceClick : undefined}
               >
                 <span
                   className={`after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 ${isActive
