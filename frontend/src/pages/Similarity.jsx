@@ -9,6 +9,10 @@ import { Helmet } from "react-helmet";
 // Global variable
 export let isAnalysed = false;
 
+export function resetIsAnalysed() {
+    isAnalysed = false;
+}
+
 export default function Similarity() {
     const [loadingText, setLoadingText] = useState("Thinking");
     const sampleText = [

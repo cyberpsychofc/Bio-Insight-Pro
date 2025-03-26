@@ -5,6 +5,7 @@ import ImageText from './components/ImageText.jsx';
 import TitleCard from './components/TitleCard.jsx';
 import { useNavigate } from "react-router"
 import { Helmet } from 'react-helmet';
+import { resetIsAnalysed } from './pages/Similarity.jsx';
 
 export default function App() {
   const nav = useNavigate();
@@ -24,6 +25,7 @@ export default function App() {
   }, []);
 
   const handleFileUpload = (files) => {
+    resetIsAnalysed();
     if (files.length > 0) {
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
