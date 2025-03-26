@@ -15,6 +15,12 @@ export function resetIsAnalysed() {
     isAnalysed = false;
 }
 
+export let relFound = false;
+
+export function resetRelFound() {
+    relFound = false;
+}
+
 export default function Similarity() {
     const navigate = useNavigate();
     const [loadingText, setLoadingText] = useState("Thinking");
@@ -56,6 +62,7 @@ export default function Similarity() {
 
     async function handleKnowledgeGraph() {
         console.log('Creating Graphs...');
+        relFound = false;
         function delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
@@ -73,6 +80,7 @@ export default function Similarity() {
         }
         console.log('All graphs created successfully.');
         navigate('/biomap');
+        relFound = true;
     }
 
     useEffect(() => {

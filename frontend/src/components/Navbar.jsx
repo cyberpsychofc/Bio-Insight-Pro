@@ -3,17 +3,25 @@ import '../App.css';
 import { useLocation, Link } from 'react-router';
 import alignIcon from "/align.svg";
 import graphIcon from "/graph.svg"
-import { isAnalysed } from '../pages/Similarity';
+import { isAnalysed, relFound } from '../pages/Similarity';
 
 export default function Navbar() {
   const location = useLocation();
   /* console.log(location.pathname); */
-  const handleSimilarityClick = (e) => {
+  function handleSimilarityClick(e) {
     if (!isAnalysed) {
       e.preventDefault(); // Prevent navigation
       alert("Please analyze documents first.");
     }
-  };
+  }
+
+  function handleBioMapClick(e) {
+    if (!relFound) {
+      e.preventDefault(); // Prevent navigation
+      alert("Please analyze documents first.");
+    }
+  }
+
   return (
     <nav
       className="text-white flex p-7 text-2xl justify-between bg-transparent sticky z-10 top-0 left-0 right-0 backdrop-blur-md"
@@ -53,7 +61,7 @@ export default function Navbar() {
             <div className="flex items-center gap-2" key={index}>
               <Link
                 to={path}
-                onClick={item === "Similarity" ? handleSimilarityClick : undefined} // Prevent navigation
+                onClick={item === "Similarity" ? handleSimilarityClick : item === "BioMap" ? handleBioMapClick : undefined} // Prevent navigation
                 className={`relative group ${isActive ? "text-white" : "hover:text-white"}`}
                 aria-label={item}
               >

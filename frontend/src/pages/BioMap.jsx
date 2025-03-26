@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 import DatabaseTabs from "../components/DatabaseTabs";
 import { getGraphData } from "../getDatabase.js";
 import { Helmet } from "react-helmet";
+import { relFound } from "./Similarity.jsx";
+
 
 export default function Services() {
   const graphRef = useRef(null);
