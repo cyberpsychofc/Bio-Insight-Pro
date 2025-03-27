@@ -72,7 +72,7 @@ export default function Similarity() {
                 console.log(`Creating Graph for file ${i} ...`);
                 let response = await axios.post(`http://localhost:8000/agent/ner/${i}/create-graph`);
                 console.log(`Graph created for file ${i}`, response.message);
-                await delay(10000);
+                await delay(500);
             } catch (error) {
                 console.error(`Error creating graph for file ${i}:`, error);
                 try {
