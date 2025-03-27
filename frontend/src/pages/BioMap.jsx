@@ -5,20 +5,27 @@ import Footer from "../components/Footer";
 import DatabaseTabs from "../components/DatabaseTabs";
 import { getGraphData } from "../getDatabase.js";
 import { Helmet } from "react-helmet";
-import { relFound } from "./Similarity.jsx";
+import { n } from "../App.jsx";
+import { useNavigate } from "react-router";
 
-
-export default function Services() {
+export default function BioMap() {
   const graphRef = useRef(null);
   const graphInstance = useRef(null);
   const [selectedDatabase, setSelectedDatabase] = useState("");
-  const [responses, setResponses] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedDatabase) {
       loadData(selectedDatabase);
     }
   }, [selectedDatabase]);
+
+  useEffect(() => {
+    console.log(n);
+    if (n == 0) {
+      navigate('/');
+    }
+  }, [n]);
 
   async function loadData(database) {
     const { nodes, links } = await getGraphData(database);

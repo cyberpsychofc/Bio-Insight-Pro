@@ -7,19 +7,19 @@ import AnimatedNumber from "../components/AnimatedNumber.jsx";
 import { Helmet } from "react-helmet";
 import { filesSize } from "../App.jsx";
 import { useNavigate } from "react-router";
-
 // Global variable
 export let isAnalysed = false;
-
 export function resetIsAnalysed() {
     isAnalysed = false;
 }
 
-export let relFound = false;
+export let n = filesSize;
 
+export let relFound = false;
 export function resetRelFound() {
     relFound = false;
 }
+
 
 export default function Similarity() {
     const navigate = useNavigate();
@@ -38,7 +38,8 @@ export default function Similarity() {
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState({});
 
-    const handleAnalyze = async () => {
+    async function handleAnalyze() {
+        window.scrollTo(0, 0);
         setIsLoading(true);
         isAnalysed = false; // Reset state
         localStorage.removeItem('similarityResult'); // Clear localStorage
@@ -58,7 +59,7 @@ export default function Similarity() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }
 
     async function handleKnowledgeGraph() {
         console.log('Creating Graphs...');
@@ -82,6 +83,14 @@ export default function Similarity() {
         navigate('/biomap');
         relFound = true;
     }
+
+    useEffect(() => {
+        console.log('filesSize:', filesSize);
+        if (filesSize === 0) {
+            navigate('/');
+        }
+    }, [filesSize]);
+
 
     useEffect(() => {
         if (!isAnalysed) {
