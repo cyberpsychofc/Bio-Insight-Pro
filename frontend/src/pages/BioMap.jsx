@@ -5,25 +5,34 @@ import Footer from "../components/Footer";
 import DatabaseTabs from "../components/DatabaseTabs";
 import { getGraphData } from "../getDatabase.js";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router";
+import { relFound } from "./Similarity.jsx";
 
-export default function Services() {
+export default function BioMap() {
   const graphRef = useRef(null);
   const graphInstance = useRef(null);
   const [selectedDatabase, setSelectedDatabase] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedDatabase) {
       loadData(selectedDatabase);
     }
-  }, [selectedDatabase]); // Reload graph when database changes
+  }, [selectedDatabase]);
 
-  const loadData = async (database) => {
+  useEffect(() => {
+    if (!relFound) {
+      navigate('/');
+    }
+  }, [relFound]);
+
+  async function loadData(database) {
     const { nodes, links } = await getGraphData(database);
 
     if (graphRef.current) {
       if (!graphInstance.current) {
         graphInstance.current = ForceGraph3D()(graphRef.current)
-          .backgroundColor("#000000").width(1800);
+          .backgroundColor("#000000").width(window.innerWidth).height(window.innerHeight);
 
         // Add Bloom Effect
         const bloomPass = new UnrealBloomPass();
@@ -39,13 +48,13 @@ export default function Services() {
         .linkDirectionalParticles(4)
         .linkDirectionalParticleSpeed(1);
     }
-  };
+  }
 
   return (
     <>
       <Helmet>
         <title>
-          Services | BioInsightPro
+          BioMap | BioInsightPro
         </title>
       </Helmet>
       <DatabaseTabs onSelectDatabase={setSelectedDatabase} />

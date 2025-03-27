@@ -1,29 +1,34 @@
 import React from 'react';
 import '../App.css';
-import { useLocation, Link, useNavigate } from 'react-router';
+import { useLocation, Link } from 'react-router';
 import alignIcon from "/align.svg";
 import graphIcon from "/graph.svg"
+import { isAnalysed, relFound } from '../pages/Similarity';
 
-export default function Navbar({ canAccessServices }) {
+export default function Navbar() {
   const location = useLocation();
-  const navigate = useNavigate();
   /* console.log(location.pathname); */
-
-  const handleServiceClick = (event) => {
-    if (!canAccessServices) {
-      event.preventDefault();
-      alert('Please analyze documents');// Prevents navigation
-      navigate(location.pathname); // Stay on the current page
+  function handleSimilarityClick(e) {
+    if (!isAnalysed) {
+      e.preventDefault(); // Prevent navigation
+      alert("Please analyze documents first.");
     }
-  };
+  }
+
+  function handleBioMapClick(e) {
+    if (!relFound) {
+      e.preventDefault(); // Prevent navigation
+      alert("Please analyze documents first.");
+    }
+  }
 
   return (
     <nav
       className="text-white flex p-7 text-2xl justify-between bg-transparent sticky z-10 top-0 left-0 right-0 backdrop-blur-md"
       role="navigation"
     >
-      <a
-        href="https://bioinsight.pro/"
+      <Link
+        to="https://bioinsight.pro/"
         aria-label="Home"
         className="inline-block transform transition-all duration-300 hover:scale-110 hover:drop-shadow-lg"
       >
@@ -44,10 +49,10 @@ export default function Navbar({ canAccessServices }) {
             d="M15.041 13.862A4.999 4.999 0 0 1 17 17.831V21M7 3v3.169a5 5 0 0 0 1.891 3.916M17 3v3.169a5 5 0 0 1-2.428 4.288l-5.144 3.086A5 5 0 0 0 7 17.831V21M7 5h10M7.399 8h9.252M8 16h8.652M7 19h10"
           />
         </svg>
-      </a>
+      </Link>
 
       <div className="text-xl text-gray-500 flex gap-9 mt-4">
-        {["Home", "About", "Similarity", "BioAlign", "Services"].map((item, index) => {
+        {["Home", "About", "Similarity", "BioAlign", "BioMap"].map((item, index) => {
           let path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
           if (item === "BioAlign") path = "/align";
           const isActive = location.pathname === path;
@@ -56,9 +61,9 @@ export default function Navbar({ canAccessServices }) {
             <div className="flex items-center gap-2" key={index}>
               <Link
                 to={path}
+                onClick={item === "Similarity" ? handleSimilarityClick : item === "BioMap" ? handleBioMapClick : undefined} // Prevent navigation
                 className={`relative group ${isActive ? "text-white" : "hover:text-white"}`}
                 aria-label={item}
-                onClick={item === "Similarity" ? handleServiceClick : undefined}
               >
                 <span
                   className={`after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 ${isActive
@@ -78,7 +83,7 @@ export default function Navbar({ canAccessServices }) {
                   color='white'
                 />
               )}
-              {item === "Services" && (
+              {item === "BioMap" && (
                 <img
                   src={graphIcon}
                   alt="Graph Icon"
@@ -101,4 +106,4 @@ export default function Navbar({ canAccessServices }) {
       </div>
     </nav>
   );
-};
+}

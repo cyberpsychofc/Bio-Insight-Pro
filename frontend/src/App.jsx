@@ -5,6 +5,9 @@ import ImageText from './components/ImageText.jsx';
 import TitleCard from './components/TitleCard.jsx';
 import { useNavigate } from "react-router"
 import { Helmet } from 'react-helmet';
+import { resetIsAnalysed } from './pages/Similarity.jsx';
+
+export let filesSize = 0;
 
 export default function App() {
   const nav = useNavigate();
@@ -12,7 +15,6 @@ export default function App() {
   const footerRef = useRef(null);
   const [localFiles, setLocalFiles] = useState({});
   const [isDragging, setIsDragging] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => {
       const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
@@ -24,16 +26,13 @@ export default function App() {
   }, []);
 
   const handleFileUpload = (files) => {
+    resetIsAnalysed();
     if (files.length > 0) {
+      filesSize = files.length;
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
       }
-
-
-
-
-
       axios.post('http://localhost:8000/api/upload/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
