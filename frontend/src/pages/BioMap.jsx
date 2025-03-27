@@ -5,8 +5,8 @@ import Footer from "../components/Footer";
 import DatabaseTabs from "../components/DatabaseTabs";
 import { getGraphData } from "../getDatabase.js";
 import { Helmet } from "react-helmet";
-import { n } from "../App.jsx";
 import { useNavigate } from "react-router";
+import { relFound } from "./Similarity.jsx";
 
 export default function BioMap() {
   const graphRef = useRef(null);
@@ -21,11 +21,10 @@ export default function BioMap() {
   }, [selectedDatabase]);
 
   useEffect(() => {
-    console.log(n);
-    if (n == 0) {
+    if (!relFound) {
       navigate('/');
     }
-  }, [n]);
+  }, [relFound]);
 
   async function loadData(database) {
     const { nodes, links } = await getGraphData(database);
@@ -33,7 +32,7 @@ export default function BioMap() {
     if (graphRef.current) {
       if (!graphInstance.current) {
         graphInstance.current = ForceGraph3D()(graphRef.current)
-          .backgroundColor("#000000").width(1800);
+          .backgroundColor("#000000").width(window.innerWidth).height(window.innerHeight);
 
         // Add Bloom Effect
         const bloomPass = new UnrealBloomPass();

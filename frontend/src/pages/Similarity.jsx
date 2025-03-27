@@ -70,13 +70,16 @@ export default function Similarity() {
         for (let i = 1; i <= filesSize; i++) {
             try {
                 console.log(`Creating Graph for file ${i} ...`);
-                const response = await axios.post(`http://localhost:8000/agent/ner/${i}/create-graph`);
+                let response = await axios.post(`http://localhost:8000/agent/ner/${i}/create-graph`);
                 console.log(`Graph created for file ${i}`, response.message);
-
                 await delay(10000);
-
             } catch (error) {
                 console.error(`Error creating graph for file ${i}:`, error);
+                try {
+                    response = await axios.post(`http://localhost:8000/agent/ner/${i}/create-graph`);
+                } catch (error) {
+                    console.error(`Error creating graph for file ${i} again:`, error);
+                }
             }
         }
         console.log('All graphs created successfully.');

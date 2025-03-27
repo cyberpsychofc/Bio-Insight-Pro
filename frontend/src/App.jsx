@@ -8,7 +8,6 @@ import { Helmet } from 'react-helmet';
 import { resetIsAnalysed } from './pages/Similarity.jsx';
 
 export let filesSize = 0;
-export let n = 0;
 
 export default function App() {
   const nav = useNavigate();
@@ -30,7 +29,6 @@ export default function App() {
     resetIsAnalysed();
     if (files.length > 0) {
       filesSize = files.length;
-      n = files.length;
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
