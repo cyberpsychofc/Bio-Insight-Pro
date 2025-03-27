@@ -15,7 +15,7 @@ const Loader2 = () => {
 
 const StyledWrapper = styled.div`
   .three-body {
-   --uib-size: 35px;
+   --uib-size: 50px;
    --uib-speed: 0.8s;
    --uib-color: #00FFFF;
    position: relative;
