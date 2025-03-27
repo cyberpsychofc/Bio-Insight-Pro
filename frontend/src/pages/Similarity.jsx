@@ -7,6 +7,7 @@ import AnimatedNumber from "../components/AnimatedNumber.jsx";
 import { Helmet } from "react-helmet";
 import { filesSize } from "../App.jsx";
 import { useNavigate } from "react-router";
+import Loader2 from "../components/Loader2.jsx";
 // Global variable
 export let isAnalysed = false;
 export function resetIsAnalysed() {
@@ -20,9 +21,9 @@ export function resetRelFound() {
     relFound = false;
 }
 
-
 export default function Similarity() {
     const navigate = useNavigate();
+    const [isGraph, setIsGraph] = useState(false);
     const [loadingText, setLoadingText] = useState("Thinking");
     const sampleText = [
         "Thinking",
@@ -63,6 +64,7 @@ export default function Similarity() {
 
     async function handleKnowledgeGraph() {
         console.log('Creating Graphs...');
+        setIsGraph(true);
         relFound = false;
         function delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
@@ -83,6 +85,7 @@ export default function Similarity() {
             }
         }
         console.log('All graphs created successfully.');
+        setIsGraph(false);
         navigate('/biomap');
         relFound = true;
     }
@@ -142,8 +145,13 @@ export default function Similarity() {
                             className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-16"
                             onClick={handleKnowledgeGraph}
                         >
-                            Knowledge Graph
+                            Create Map
                         </button>
+                        {isGraph && (
+                            <div className="flex items-center justify-center">
+                                <Loader2 />
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

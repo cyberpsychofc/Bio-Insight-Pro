@@ -6,6 +6,7 @@ import TitleCard from './components/TitleCard.jsx';
 import { useNavigate } from "react-router"
 import { Helmet } from 'react-helmet';
 import { resetIsAnalysed } from './pages/Similarity.jsx';
+import Loader from './components/Loader.jsx';
 
 export let filesSize = 0;
 
@@ -15,6 +16,8 @@ export default function App() {
   const footerRef = useRef(null);
   const [localFiles, setLocalFiles] = useState({});
   const [isDragging, setIsDragging] = useState(false);
+  const [simLoading, setSimLoading] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
@@ -26,6 +29,7 @@ export default function App() {
   }, []);
 
   const handleFileUpload = (files) => {
+    setSimLoading(true);
     resetIsAnalysed();
     if (files.length > 0) {
       filesSize = files.length;
@@ -38,6 +42,7 @@ export default function App() {
       })
         .then((response) => {
           console.log("Files uploaded successfully", response.data);
+          setSimLoading(false);
           nav('/similarity');
         })
         .catch((error) => console.error("Error uploading files:", error.response?.data || error.message));
@@ -154,18 +159,22 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex justify-center mt-4">
+          <div className="grid justify-center mt-4">
             <button
-              className={`rounded text-lg font-semibold transition-all duration-300 px-8 py-3 ${Array.from(localFiles).length < 2
+              className={`rounded text-lg font-semibold transition-all duration-300 px-12 py-3 ${Array.from(localFiles).length < 2
                 ? "bg-gray-500 text-gray-300 cursor-not-allowed"
-                : "bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee]"
+                : "bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mb-4"
                 }`}
               onClick={() => handleFileUpload(localFiles)}
               disabled={Array.from(localFiles).length < 2}
             >
               Analyze
-
             </button>
+            {simLoading && (
+              <div className="mt-4 items-center justify-center">
+                <Loader />
+              </div>
+            )}
           </div>
           {/* New Components Right Here */}
           <ImageText />
