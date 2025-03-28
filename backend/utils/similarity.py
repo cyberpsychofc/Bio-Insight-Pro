@@ -106,14 +106,15 @@ def generate_embeddings(indexed_chunks, batch_size=64):  # Increased batch size 
     return embeddings
 
 def find_top_matching_pairs(embeddings1, embeddings2, indexed_chunks1, indexed_chunks2):
-    # convert to numpy arrays
+    # Convert to numpy arrays
     embeddings1_np = np.vstack(embeddings1)
     embeddings2_np = np.vstack(embeddings2)
-    # normalising each embedding
+
+    # Normalize each embedding
     embeddings1_normalized = normalize(embeddings1_np)
     embeddings2_normalized = normalize(embeddings2_np)
 
-    # cosine similarity
+    # Cosine similarity
     similarity_matrix = np.dot(embeddings1_normalized, embeddings2_normalized.T)
 
     most_similar_indices = np.argmax(similarity_matrix, axis=1)
@@ -123,14 +124,22 @@ def find_top_matching_pairs(embeddings1, embeddings2, indexed_chunks1, indexed_c
     for idx1, (idx, score) in enumerate(zip(most_similar_indices, similarity_scores)):
         if score > 0.98:
             continue
+        # Validate index
+        if idx1 >= len(indexed_chunks2):
+            continue
+
+        left_text = indexed_chunks1[idx1]['text'].page_content if hasattr(indexed_chunks1[idx1]['text'], 'page_content') else ''
+        right_text = indexed_chunks2[idx1]['text'].page_content if hasattr(indexed_chunks2[idx1]['text'], 'page_content') else ''
+
         pair = {
-            "left_chunk":indexed_chunks1[idx1]['text'].page_content,
-            "right_chunk":indexed_chunks2[idx1]['text'].page_content,
-            "similarity_score":score
+            "left_chunk": left_text,
+            "right_chunk": right_text,
+            "similarity_score": score
         }
         matched_pairs.append(pair)
-    
+
     return matched_pairs
+
 
 def get_TSNE(embeddings1, embeddings2):
     combined_embeddings = np.vstack((embeddings1, embeddings2)) 
