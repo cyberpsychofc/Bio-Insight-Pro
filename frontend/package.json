@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.8.1",
     "3d-force-graph": "^1.77.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",

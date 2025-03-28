@@ -24,7 +24,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className="text-white flex p-7 text-2xl justify-between bg-transparent sticky z-10 top-0 left-0 right-0 backdrop-blur-md"
+      className="text-white flex p-7 text-2xl justify-between bg-transparent sticky z-40 top-0 left-0 right-0 backdrop-blur-md"
       role="navigation"
     >
       <Link
