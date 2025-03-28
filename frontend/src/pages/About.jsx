@@ -10,6 +10,7 @@ export default function About() {
     const [init, setInit] = useState(false);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         initParticlesEngine(async (engine) => {
             await loadSlim(engine);
         }).then(() => {
@@ -112,7 +113,7 @@ export default function About() {
                 <div className="relative z-10 text-white max-w-4xl mx-auto px-6 lg:px-4 py-16 space-y-12">
                     {/* About Header with Gradient */}
                     <div className="text-center mb-12">
-                        <h1 className="text-5xl font-bold bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent mb-4">
+                        <h1 className="text-5xl font-bold bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent mb-4 p-2">
                             About Bio Insight Pro
                         </h1>
                         <h2 className="text-2xl font-semibold text-gray-100">
@@ -191,12 +192,12 @@ export default function About() {
 
                     {/* Call to Action */}
                     <div className="text-center bg-[#0a172d] rounded-lg p-8 shadow-xl">
-                        <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent mb-4">Join Our Journey</h3>
+                        <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent mb-4 p-2">Join Our Journey</h3>
                         <p className="text-gray-100 mb-6">
                             Unlock the potential of AI in medical research. Connect with Bio Insight Pro today and transform
                             how you analyze medical data.
                         </p>
-                        <button className="bg-blue-200 text-[#0a192f] px-6 py-3 rounded-full font-semibold hover:bg-teal-400 transition-colors"
+                        <button className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-6"
                             onClick={() => navigate("/")}
                         >
                             Get Started
