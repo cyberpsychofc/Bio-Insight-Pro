@@ -21,7 +21,7 @@ export default function App() {
   useEffect(() => {
     const handleScroll = () => {
       const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
-      setIsFixedDivVisible(window.scrollY > 1125 && window.scrollY + 1000 <= footerTop);
+      setIsFixedDivVisible(window.scrollY > 1013 && window.scrollY + 1000 <= footerTop);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -95,7 +95,7 @@ export default function App() {
                     </svg>
                     <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                     <p className="text-xs text-gray-500">PDF</p>
-                    <p className='text-gray-500 text-center mb-2 text-sm'>Please upload at least 2 documents</p>
+                    <p className='text-gray-500 text-center mb-2 text-sm'>Please upload only 2 documents</p>
                     <input
                       id="file-upload"
                       type="file"
@@ -143,7 +143,7 @@ export default function App() {
                       <div>
                         <p className="text-white">{file.name}</p>
                         <p className="text-gray-400 text-sm">
-                          {(file.size / 1024).toFixed(2)} KB - {file.timestamp}
+                          {(file.size / 1024).toFixed(2)} KB
                         </p>
                       </div>
                       <button
@@ -161,12 +161,12 @@ export default function App() {
 
           <div className="grid justify-center mt-4">
             <button
-              className={`rounded text-lg font-semibold transition-all duration-300 px-12 py-3 ${Array.from(localFiles).length < 2
+              className={`rounded text-lg font-semibold transition-all duration-300 px-12 py-3 ${Array.from(localFiles).length != 2
                 ? "bg-gray-500 text-gray-300 cursor-not-allowed"
                 : "bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mb-4"
                 }`}
               onClick={() => handleFileUpload(localFiles)}
-              disabled={Array.from(localFiles).length < 2}
+              disabled={Array.from(localFiles).length != 2}
             >
               Analyze
             </button>
