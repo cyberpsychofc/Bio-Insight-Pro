@@ -30,6 +30,7 @@ class NewSession(APIView):
                 if db.lower() not in ["system", "neo4j"]:
                     # Drop each database except 'system' and 'neo4j'
                     session.run(f"DROP DATABASE {db} IF EXISTS")
+        neo4jdriver.close()
         # Check if any namespaces exist
         if "namespaces" in stats and stats["namespaces"]:
             index.delete(delete_all=True)

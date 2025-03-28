@@ -166,4 +166,6 @@ class NERView(APIView):
         # create graph-db
         perform_ner(files[index-1][:(len(files[0]))-4], processed_corpus)
         
+        neo4jdriver.close()
+        
         return Response({"message":"success"},status=status.HTTP_201_CREATED)
