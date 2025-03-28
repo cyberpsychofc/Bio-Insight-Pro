@@ -21,7 +21,7 @@ export default function App() {
   useEffect(() => {
     const handleScroll = () => {
       const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
-      setIsFixedDivVisible(window.scrollY > 1013 && window.scrollY + 1000 <= footerTop);
+      setIsFixedDivVisible(window.scrollY > 1125 && window.scrollY + 1000 <= footerTop);
     };
 
     window.addEventListener('scroll', handleScroll);
