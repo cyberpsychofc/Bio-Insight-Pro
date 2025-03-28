@@ -5,10 +5,12 @@ django-cors-headers
 gunicorn
 nltk
 langchain
+langchain_openai
 langchain-pinecone
 langchain-community
 langchain-groq
-langchain_openai
+langchain-neo4j
+langchain-experimental 
 matplotlib
 numpy
 pinecone
@@ -17,6 +19,5 @@ pypdf
 scikit-learn
 transformers
 Bio
-langchain-experimental 
 neo4j
 # (torch w/ cuda) pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118

@@ -11,7 +11,7 @@ from pypdf import PdfReader
 from pinecone import Pinecone
 from neo4j import GraphDatabase
 
-from utils.ner import perform_ner
+from utils.ner import perform_ner_parallel
 from utils.similarity import (
     preprocess,
     generate_embeddings,
@@ -164,7 +164,7 @@ class NERView(APIView):
         
         processed_corpus = preprocess(PdfReader(PATH + '/' + files[index-1]))
         # create graph-db
-        perform_ner(files[index-1][:(len(files[0]))-4], processed_corpus)
+        perform_ner_parallel(files[index-1][:(len(files[0]))-4], processed_corpus)
         
         neo4jdriver.close()
         
