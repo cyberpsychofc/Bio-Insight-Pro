@@ -33,18 +33,14 @@ export default function BioAlign() {
 
     async function handleAlignResponse(sequence1, sequence2) {
         try {
-            const cleanSequence1 = sequence1.replace(/\r?\n/g, "").trim();
-            const cleanSequence2 = sequence2.replace(/\r?\n/g, "").trim();
-            console.log("Cleaned Sequence 1:", cleanSequence1);
-            console.log("Cleaned Sequence 2:", cleanSequence2);
             const response = await fetch("http://localhost:8000/seq/align", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    sequence1: cleanSequence1,
-                    sequence2: cleanSequence2
+                    sequence1,
+                    sequence2
                 }),
             });
 
@@ -133,8 +129,8 @@ export default function BioAlign() {
                                         margin: "0 auto",
                                     }}
                                 >
-                                    <pre className="inline-block">{a.sequence1 || "N/A"}</pre>
-                                    <pre className="inline-block">{a.alignment || "N/A"}</pre>
+                                    <pre className="inline-block">{a.sequence1 || "N/A"}</pre><br />
+                                    <pre className="inline-block">{a.alignment || "N/A"}</pre><br />
                                     <pre className="inline-block">{a.sequence2 || "N/A"}</pre>
                                 </div>
                                 <hr className="my-4 border-gray-700" />
