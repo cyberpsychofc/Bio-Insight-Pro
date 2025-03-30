@@ -14,23 +14,30 @@ export default function App() {
   const nav = useNavigate();
   const [isFixedDivVisible, setIsFixedDivVisible] = useState(false);
   const footerRef = useRef(null);
-  const [localFiles, setLocalFiles] = useState({});
+  const [localFiles, setLocalFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [simLoading, setSimLoading] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
-      setIsFixedDivVisible(window.scrollY > 1013 && window.scrollY + 1000 <= footerTop);
+      setIsFixedDivVisible((window.scrollY > 1013 && window.scrollY + 1000 <= footerTop));
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  function upload() {
+    console.log("Local Files", localFiles.length);
+    document.getElementById('file-upload').click();
+    console.log(localFiles.length)
+  }
+
   const handleFileUpload = (files) => {
     setSimLoading(true);
     resetIsAnalysed();
+    console.log("Files to upload:", files);
     if (files.length > 0) {
       filesSize = files.length;
       const formData = new FormData();
@@ -120,9 +127,8 @@ export default function App() {
           </div>
 
           <div
-            className={`font-semibold backdrop-blur-md fixed z-50 bottom-4 mx-auto left-0 right-0 w-4/5 sm:w-3/5 md:w-2/5 lg:w-1/4 transition-all duration-300 px-6 py-6 text-3xl rounded-lg shadow-lg cursor-pointer bg-cyan-300 hover:bg-transparent text-black hover:text-cyan-300 text-center 
-            ${isFixedDivVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-            onClick={() => document.getElementById('file-upload').click()}
+            className={`font-semibold backdrop-blur-md fixed z-50 bottom-4 mx-auto left-0 right-0 w-4/5 sm:w-3/5 md:w-2/5 lg:w-1/4 transition-all duration-300 px-6 py-6 text-3xl rounded-lg shadow-lg cursor-pointer  bg-cyan-300 text-black text-center hover:bg-transparent hover:text-cyan-300 ${isFixedDivVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} ${localFiles.length === 2 ? 'hidden' : ''}`}
+            onClick={upload}
           >
             Select document(s)
           </div>
