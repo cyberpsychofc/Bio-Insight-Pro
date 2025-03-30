@@ -46,7 +46,7 @@ export default function About() {
                         quantity: 4,
                     },
                     repulse: {
-                        distance: 200,
+                        distance: 75,
                         duration: 0.4,
                     },
                 },
@@ -60,7 +60,7 @@ export default function About() {
                     color: '#c2b4d1',
                     distance: 150,
                     enable: true,
-                    opacity: 0.6,
+                    opacity: 0.4,
                     width: 1,
                 },
                 move: {
@@ -70,7 +70,7 @@ export default function About() {
                         default: 'bounce',
                     },
                     random: true,
-                    speed: 3,
+                    speed: 6,
                     straight: false,
                 },
                 number: {
@@ -78,10 +78,10 @@ export default function About() {
                         enable: true,
                         area: 800
                     },
-                    value: 60,
+                    value: 200,
                 },
                 opacity: {
-                    value: 0.8,
+                    value: 0.5,
                 },
                 shape: {
                     type: 'circle',
