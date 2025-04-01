@@ -10,6 +10,7 @@ import Loader from './components/Loader.jsx';
 
 export let filesSize = 0;
 
+
 export default function App() {
   const nav = useNavigate();
   const [isFixedDivVisible, setIsFixedDivVisible] = useState(false);
@@ -17,6 +18,10 @@ export default function App() {
   const [localFiles, setLocalFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [simLoading, setSimLoading] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

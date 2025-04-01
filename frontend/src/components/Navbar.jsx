@@ -28,7 +28,7 @@ export default function Navbar() {
       role="navigation"
     >
       <Link
-        to="https://bioinsight.pro/"
+        to="/"
         aria-label="Home"
         className="inline-block transform transition-all duration-300 hover:scale-110 hover:drop-shadow-lg"
       >
