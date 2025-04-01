@@ -21,6 +21,10 @@ export default function BioMap() {
   }, [selectedDatabase]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (!relFound) {
       navigate('/');
     }
@@ -51,7 +55,7 @@ export default function BioMap() {
   }
 
   return (
-    <>
+    <div>
       <Helmet>
         <title>
           BioMap | BioInsightPro
@@ -61,7 +65,9 @@ export default function BioMap() {
       <div className="grid justify-center w-auto">
         <div ref={graphRef} />
       </div>
-      <Footer />
-    </>
+      <div className='w-full'>
+        <Footer />
+      </div>
+    </div>
   );
 }
