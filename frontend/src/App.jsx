@@ -18,6 +18,7 @@ export default function App() {
   const [localFiles, setLocalFiles] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [simLoading, setSimLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,9 +35,13 @@ export default function App() {
   }, []);
 
   function upload() {
-    console.log("Local Files", localFiles.length);
-    document.getElementById('file-upload').click();
-    console.log(localFiles.length)
+    fileInputRef.current.click();
+  }
+
+  function handleFileChange(event) {
+    const newFiles = Array.from(event.target.files);
+    setLocalFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    event.target.value = null;
   }
 
   const handleFileUpload = (files) => {
@@ -71,17 +76,12 @@ export default function App() {
   const handleDrop = (event) => {
     event.preventDefault();
     setIsDragging(false);
-    setLocalFiles(event.dataTransfer.files);
+    const newFiles = Array.from(event.dataTransfer.files);
+    setLocalFiles((prevFiles) => [...prevFiles, ...newFiles]);
   };
 
   const handleRemoveFile = (index) => {
-    const dataTransfer = new DataTransfer();
-    Array.from(localFiles).forEach((file, i) => {
-      if (i != index) {
-        dataTransfer.items.add(file);
-      }
-    });
-    setLocalFiles(dataTransfer.files);
+    setLocalFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
   return (
@@ -97,8 +97,8 @@ export default function App() {
               className={`relative w-full max-w-5xl md:py-8 text-white rounded-lg shadow-lg transition-all duration-300 text-center `}
             >
               <div className="flex flex-col items-center justify-center border-2 p-10 rounded border-gray-700 w-full">
-                <label htmlFor="file-upload" className="flex flex-col items-center justify-center bg-gray-950 rounded-md hover:bg-gray-700 border-2 border-dashed border-gray-700 hover:border-gray-500 cursor-pointer h-64 w-full">
-                  <div className={`flex flex-col items-center px-5 md:px-10 py-10 md:py-20 w-full ${isDragging ? 'border-cyan-300 bg-gray-800' : 'border-gray-700 hover:border-gray-500'}`} onDragOver={handleDragOver}
+                <label htmlFor="file-upload" className="flex flex-col items-center justify-center bg-gray-950 rounded-md hover:bg-gray-700 border-2 border-dashed border-gray-700 hover:border-gray-500 cursor-pointer h-64 w-full bg-opacity-75 hover:bg-opacity-50 transition-all duration-150">
+                  <div className={`flex flex-col  items-center px-5 md:px-10 py-10 md:py-20 w-full ${isDragging ? 'border-cyan-300 bg-gray-800' : 'border-gray-700 hover:border-gray-500'}`} onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                   >
@@ -106,15 +106,14 @@ export default function App() {
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                     </svg>
                     <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                    <p className="text-xs text-gray-500">PDF</p>
+                    <p className="text-xs text-gray-500 font-bold mb-2">PDF</p>
                     <p className='text-gray-500 text-center mb-2 text-sm'>Please upload only 2 documents</p>
                     <input
                       id="file-upload"
                       type="file"
+                      ref={fileInputRef}
                       className="hidden"
-                      onChange={(e) => {
-                        setLocalFiles(e.target.files);
-                      }}
+                      onChange={handleFileChange}
                       accept=".pdf"
                       multiple
                     />
@@ -123,7 +122,7 @@ export default function App() {
                 <p className="text-gray-400 text-2xl mt-4">or</p>
                 <button
                   className="bg-cyan-300 rounded text-lg text-black font-semibold hover:bg-transparent hover:text-cyan-300 transition-all duration-300 shadow-[0_0_10px_#22d3ee] px-8 py-3 mt-4"
-                  onClick={() => document.getElementById('file-upload').click()}
+                  onClick={upload}
                 >
                   Select document(s)
                 </button>
@@ -149,7 +148,7 @@ export default function App() {
                   {Array.from(localFiles).map((file, index) => (
                     <li
                       key={index}
-                      className="flex justify-between items-center bg-gray-800 p-4 mb-2 rounded-md"
+                      className="flex justify-between items-center bg-gray-800 p-4 mb-2 rounded-md bg-opacity-75"
                     >
                       <div>
                         <p className="text-white">{file.name}</p>
@@ -158,7 +157,7 @@ export default function App() {
                         </p>
                       </div>
                       <button
-                        className="bg-red-500 text-white rounded px-4 py-2"
+                        className="bg-red-500 hover:bg-transparent hover:text-red-500 transition-all duration-300 text-white rounded px-4 py-2"
                         onClick={() => handleRemoveFile(index)}
                       >
                         Remove
