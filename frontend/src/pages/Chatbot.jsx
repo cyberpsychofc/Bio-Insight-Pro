@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import Footer from '../components/Footer.jsx';
 
 const key = import.meta.env.VITE_OPENAI_API_KEY;
 
@@ -107,45 +108,48 @@ const Chatbot = () => {
     }, [messages]);
 
     return (
-        <div className={`flex flex-col min-h-screen px-10 py-6 ${messages.length === 0 ? 'overflow-hidden' : 'overflow-auto'}`}>
-            {messages.length === 0 ? (
-                <div className="flex flex-1 items-center justify-center">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={handleSend}
-                        className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full max-w-5xl p-4 placeholder-gray-400"
-                        placeholder="How may I help you?"
-                    />
-                </div>
-            ) : (
-                <>
-                    <div className="flex flex-col space-y-4 mb-32 mt-20 mr-96">
-                        {messages.map((msg, index) => (
-                            <div key={index} className={`flex flex-col ${msg.role === 'user' ? 'self-end items-end' : 'self-start items-start'}`}>
-                                <div className={`px-4 py-2 ml-96 rounded-3xl ${msg.role === 'user' ? 'bg-cyan-400 text-black text-md font-semibold rounded-s-3xl' : ' text-white text-xl rounded-e-3xl rounded-es-3xl'}`}>
-                                    {msg.content}
-                                </div>
-
-                            </div>
-                        ))}
-                        <div ref={messagesEndRef} />
-                    </div>
-
-                    <div className="fixed bottom-0 left-0 right-0 flex justify-center px-10">
+        <>
+            <div className={`flex flex-col min-h-screen px-10 py-6 ${messages.length === 0 ? 'overflow-hidden' : 'overflow-auto'}`}>
+                {messages.length === 0 ? (
+                    <div className="flex flex-1 items-center justify-center">
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={handleSend}
-                            className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full max-w-5xl p-4 placeholder-gray-400 mb-20"
+                            className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full max-w-5xl p-4 placeholder-gray-400"
                             placeholder="How may I help you?"
                         />
                     </div>
-                </>
-            )}
-        </div>
+                ) : (
+                    <>
+                        <div className="flex flex-col space-y-4 mb-32 mt-20 mr-96">
+                            {messages.map((msg, index) => (
+                                <div key={index} className={`flex flex-col ${msg.role === 'user' ? 'self-end items-end' : 'self-start items-start'}`}>
+                                    <div className={`px-4 py-2 ml-96 rounded-3xl ${msg.role === 'user' ? 'bg-cyan-400 text-black text-md font-semibold rounded-s-3xl' : ' text-white text-xl rounded-e-3xl rounded-es-3xl'}`}>
+                                        {msg.content}
+                                    </div>
+
+                                </div>
+                            ))}
+                            <div ref={messagesEndRef} />
+                        </div>
+
+                        <div className="fixed bottom-0 left-0 right-0 flex justify-center px-10">
+                            <input
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={handleSend}
+                                className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full max-w-5xl p-4 placeholder-gray-400 mb-20"
+                                placeholder="How may I help you?"
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
+            <Footer />
+        </>
     );
 };
 
