@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Footer from '../components/Footer.jsx';
+import { Markdown } from "../components/NonMemoizedMarkdown.jsx";
 
 const key = import.meta.env.VITE_OPENAI_API_KEY;
 
 const Chatbot = () => {
-    const [messages, setMessages] = useState([]); // { role: 'user' | 'assistant', content: string }
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const messagesEndRef = useRef(null);
 
@@ -47,9 +48,8 @@ const Chatbot = () => {
                     const chunk = decoder.decode(value, { stream: true });
                     buffer += chunk;
 
-                    // Process only complete lines
                     let lines = buffer.split('\n');
-                    buffer = lines.pop(); // keep the last line (might be incomplete)
+                    buffer = lines.pop();
 
                     for (const line of lines) {
                         if (!line.trim().startsWith('data:')) continue;
@@ -74,15 +74,15 @@ const Chatbot = () => {
                                 streamingStarted = true;
                                 currentMessage = currentMessage.slice(idx + '</think>'.length);
 
-                                setMessages(prev => [
-                                    ...prev,
-                                    { role: 'assistant', content: currentMessage }
-                                ]);
+                                setMessages(prev => {
+                                    const updated = [...prev];
+                                    updated[updated.length - 1] = { role: 'assistant', content: currentMessage };
+                                    return updated;
+                                });
                             }
                             continue;
                         }
 
-                        // If streaming already started, update the last message
                         setMessages(prev => {
                             const updated = [...prev];
                             updated[updated.length - 1] = {
@@ -94,7 +94,6 @@ const Chatbot = () => {
                     }
                 }
 
-
             } catch (err) {
                 console.error('Error streaming response:', err);
                 setMessages(prev => [...prev, { role: 'assistant', content: 'Oops! Something went wrong.' }]);
@@ -102,46 +101,48 @@ const Chatbot = () => {
         }
     };
 
-
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
     return (
         <>
-            <div className={`flex flex-col min-h-screen px-10 py-6 ${messages.length === 0 ? 'overflow-hidden' : 'overflow-auto'}`}>
+            <div className="flex flex-col h-screen mx-96 p-4 backdrop-blur-sm">
                 {messages.length === 0 ? (
-                    <div className="flex flex-1 items-center justify-center">
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={handleSend}
-                            className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full max-w-5xl p-4 placeholder-gray-400"
-                            placeholder="How may I help you?"
-                        />
-                    </div>
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={handleSend}
+                        className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10"
+                        placeholder="How may I help you?"
+                    />
                 ) : (
                     <>
-                        <div className="flex flex-col space-y-4 mb-32 mt-20 mr-96">
+                        <div className="flex-1 overflow-y-auto mt-10 mb-4 space-y-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 px-4">
                             {messages.map((msg, index) => (
                                 <div key={index} className={`flex flex-col ${msg.role === 'user' ? 'self-end items-end' : 'self-start items-start'}`}>
-                                    <div className={`px-4 py-2 ml-96 rounded-3xl ${msg.role === 'user' ? 'bg-cyan-400 text-black text-md font-semibold rounded-s-3xl' : ' text-white text-xl rounded-e-3xl rounded-es-3xl'}`}>
-                                        {msg.content}
+                                    <div className={`px-4 py-2 rounded-3xl ${msg.role === 'user' ? 'bg-cyan-400 text-black text-md font-semibold rounded-s-3xl' : 'text-white text-xl rounded-e-3xl rounded-es-3xl'}`}>
+                                        {msg.role === 'user' ? (
+                                            <span>{msg.content}</span>
+                                        ) : (
+                                            <Markdown className="text-2xl">
+                                                {msg.content}
+                                            </Markdown>
+                                        )}
+                                        
                                     </div>
-
                                 </div>
                             ))}
                             <div ref={messagesEndRef} />
                         </div>
-
-                        <div className="fixed bottom-0 left-0 right-0 flex justify-center px-10">
+                        <div className="py-6">
                             <input
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 onKeyDown={handleSend}
-                                className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full max-w-5xl p-4 placeholder-gray-400 mb-20"
+                                className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400"
                                 placeholder="How may I help you?"
                             />
                         </div>
