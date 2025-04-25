@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/similarity" element={<Similarity />} />
         <Route path="/align" element={<BioAlign />} />
         <Route path="/biomap" element={<BioMap />} />
-        <Route path="/chatbot" element={<Chatbot />} />
+        <Route path="/intellionco" element={<Chatbot />} />
       </Routes>
     </BrowserRouter>
   </>

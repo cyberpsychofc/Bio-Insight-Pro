@@ -52,7 +52,7 @@ export default function Navbar() {
       </Link>
 
       <div className="text-xl text-gray-500 flex gap-9 mt-4">
-        {["Home", "About", "Similarity", "BioMap", "BioAlign", "Chatbot"].map((item, index) => {
+        {["Home", "About", "Similarity", "BioMap", "BioAlign", "IntelliOnco"].map((item, index) => {
           let path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
           if (item === "BioAlign") path = "/align";
           const isActive = location.pathname === path;
