@@ -8,12 +8,36 @@ const Chatbot = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const messagesEndRef = useRef(null);
+    const [loading, setLoading] = useState(false);
+
+
+    useEffect(() => {
+        // Load saved messages
+        const savedMessages = localStorage.getItem('chat_messages');
+        if (savedMessages) {
+            setMessages(JSON.parse(savedMessages));
+        }
+
+        // Clear on reload
+        const handleBeforeUnload = () => {
+            localStorage.removeItem('chat_messages');
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('chat_messages', JSON.stringify(messages));
+    }, [messages]);
+
 
     const handleSend = async (e) => {
-        if (e.key === 'Enter' && input.trim() !== '') {
+        if (e.key === 'Enter' && input.trim() !== '' && !loading) {
             const userMessage = { role: 'user', content: input.trim() };
             setMessages(prev => [...prev, userMessage]);
             setInput('');
+            setLoading(true); // disable input while loading
 
             const systemMessages = [...messages, userMessage];
             const newBotMessage = { role: 'assistant', content: '' };
@@ -55,7 +79,10 @@ const Chatbot = () => {
                         if (!line.trim().startsWith('data:')) continue;
 
                         const messageData = line.replace(/^data:\s*/, '');
-                        if (messageData === '[DONE]') return;
+                        if (messageData === '[DONE]') {
+                            setLoading(false); // re-enable input after response
+                            return;
+                        }
 
                         let parsed;
                         try {
@@ -97,9 +124,11 @@ const Chatbot = () => {
             } catch (err) {
                 console.error('Error streaming response:', err);
                 setMessages(prev => [...prev, { role: 'assistant', content: 'Oops! Something went wrong.' }]);
+                setLoading(false);
             }
         }
     };
+
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -116,10 +145,11 @@ const Chatbot = () => {
                         onKeyDown={handleSend}
                         className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10"
                         placeholder="How may I help you?"
+                        disabled={loading}
                     />
                 ) : (
                     <>
-                        <div className="flex-1 overflow-y-auto mt-10 mb-4 space-y-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 px-4">
+                        <div className="flex-1 overflow-y-auto mt-20 mb-4 space-y-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 px-4">
                             {messages.map((msg, index) => (
                                 <div key={index} className={`flex flex-col ${msg.role === 'user' ? 'self-end items-end' : 'self-start items-start'}`}>
                                     <div className={`px-4 py-2 rounded-3xl ${msg.role === 'user' ? 'bg-cyan-400 text-black text-md font-semibold rounded-s-3xl' : 'text-white text-xl rounded-e-3xl rounded-es-3xl'}`}>
@@ -130,7 +160,7 @@ const Chatbot = () => {
                                                 {msg.content}
                                             </Markdown>
                                         )}
-                                        
+
                                     </div>
                                 </div>
                             ))}
@@ -144,6 +174,7 @@ const Chatbot = () => {
                                 onKeyDown={handleSend}
                                 className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400"
                                 placeholder="How may I help you?"
+                                disabled={loading}
                             />
                         </div>
                     </>
