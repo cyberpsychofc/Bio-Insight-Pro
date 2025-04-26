@@ -1,188 +1,261 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Footer from '../components/Footer.jsx';
-import { Markdown } from "../components/NonMemoizedMarkdown.jsx";
-
-const key = import.meta.env.VITE_OPENAI_API_KEY;
+import { useState, useRef, useEffect } from "react"
+import { Markdown } from "../components/NonMemoizedMarkdown.jsx"
 
 const Chatbot = () => {
-    const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
-    const messagesEndRef = useRef(null);
-    const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState([])
+  const [input, setInput] = useState("")
+  const messagesEndRef = useRef(null)
+  const [loadingMessageId, setLoadingMessageId] = useState(null)
+  const key = import.meta.env.VITE_OPENAI_API_KEY
 
+  useEffect(() => {
+    // Load saved messages
+    const savedMessages = localStorage.getItem("chat_messages")
+    if (savedMessages) {
+      try {
+        const parsedMessages = JSON.parse(savedMessages)
+        // Ensure all messages have an ID
+        const messagesWithIds = parsedMessages.map((msg) =>
+          msg.id ? msg : { ...msg, id: Date.now() + Math.random().toString(36).substring(2, 9) },
+        )
+        setMessages(messagesWithIds)
+      } catch (e) {
+        console.error("Error parsing saved messages:", e)
+        localStorage.removeItem("chat_messages")
+      }
+    }
 
-    useEffect(() => {
-        // Load saved messages
-        const savedMessages = localStorage.getItem('chat_messages');
-        if (savedMessages) {
-            setMessages(JSON.parse(savedMessages));
+    // Clear on reload
+    const handleBeforeUnload = () => {
+      localStorage.removeItem("chat_messages")
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload)
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem("chat_messages", JSON.stringify(messages))
+  }, [messages])
+
+  const handleSend = async (e) => {
+    if (e.key === "Enter" && input.trim() !== "") {
+      const userMessage = {
+        id: Date.now() + "-user-" + Math.random().toString(36).substring(2, 9),
+        role: "user",
+        content: input.trim(),
+      }
+      setMessages((prev) => [...prev, userMessage])
+      setInput("")
+
+      // Create message history for API request
+      const messageHistory = [...messages, userMessage].map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      }))
+
+      const messageId = Date.now() + "-assistant-" + Math.random().toString(36).substring(2, 9)
+      const newBotMessage = { id: messageId, role: "assistant", content: "", isLoading: true }
+      setMessages((prev) => [...prev, newBotMessage])
+      setLoadingMessageId(messageId)
+
+      try {
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${key}`,
+          },
+          body: JSON.stringify({
+            model: "deepseek-r1-distill-llama-70b",
+            messages: messageHistory,
+            max_completion_tokens: 4096,
+            stream: true,
+          }),
+        })
+
+        if (!res.ok) {
+          throw new Error(`API responded with status: ${res.status}`)
         }
 
-        // Clear on reload
-        const handleBeforeUnload = () => {
-            localStorage.removeItem('chat_messages');
-        };
+        const reader = res.body.getReader()
+        const decoder = new TextDecoder("utf-8")
+        let buffer = ""
+        let currentMessage = ""
+        let streamingStarted = false
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-    }, []);
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
 
-    useEffect(() => {
-        localStorage.setItem('chat_messages', JSON.stringify(messages));
-    }, [messages]);
+          const chunk = decoder.decode(value, { stream: true })
+          buffer += chunk
+          const lines = buffer.split("\n")
+          buffer = lines.pop() || ""
 
+          for (const line of lines) {
+            if (!line.trim().startsWith("data:")) continue
 
-    const handleSend = async (e) => {
-        if (e.key === 'Enter' && input.trim() !== '' && !loading) {
-            const userMessage = { role: 'user', content: input.trim() };
-            setMessages(prev => [...prev, userMessage]);
-            setInput('');
-            setLoading(true); // disable input while loading
-
-            const systemMessages = [...messages, userMessage];
-            const newBotMessage = { role: 'assistant', content: '' };
-            setMessages(prev => [...prev, newBotMessage]);
+            const messageData = line.replace(/^data:\s*/, "").trim()
+            if (messageData === "[DONE]") {
+              setLoadingMessageId(null)
+              setMessages((prev) => {
+                const updated = [...prev]
+                const index = updated.findIndex((msg) => msg.id === messageId)
+                if (index !== -1) {
+                  updated[index] = {
+                    ...updated[index],
+                  }
+                }
+                return updated
+              })
+              continue
+            }
 
             try {
-                const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${key}`,
-                    },
-                    body: JSON.stringify({
-                        model: 'deepseek-r1-distill-llama-70b',
-                        messages: systemMessages,
-                        max_completion_tokens: 4096,
-                        stream: true
-                    })
-                });
+              const parsed = JSON.parse(messageData)
+              const token = parsed.choices?.[0]?.delta?.content || ""
 
-                const reader = res.body.getReader();
-                const decoder = new TextDecoder('utf-8');
+              if (token) {
+                currentMessage += token
 
-                let buffer = '';
-                let streamingStarted = false;
-                let currentMessage = '';
-
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    const chunk = decoder.decode(value, { stream: true });
-                    buffer += chunk;
-
-                    let lines = buffer.split('\n');
-                    buffer = lines.pop();
-
-                    for (const line of lines) {
-                        if (!line.trim().startsWith('data:')) continue;
-
-                        const messageData = line.replace(/^data:\s*/, '');
-                        if (messageData === '[DONE]') {
-                            setLoading(false); // re-enable input after response
-                            return;
-                        }
-
-                        let parsed;
-                        try {
-                            parsed = JSON.parse(messageData);
-                        } catch (e) {
-                            console.warn('Skipping malformed JSON:', messageData);
-                            continue;
-                        }
-
-                        const token = parsed.choices?.[0]?.delta?.content || '';
-                        currentMessage += token;
-
-                        if (!streamingStarted) {
-                            const idx = currentMessage.indexOf('</think>');
-                            if (idx !== -1) {
-                                streamingStarted = true;
-                                currentMessage = currentMessage.slice(idx + '</think>'.length);
-
-                                setMessages(prev => {
-                                    const updated = [...prev];
-                                    updated[updated.length - 1] = { role: 'assistant', content: currentMessage };
-                                    return updated;
-                                });
-                            }
-                            continue;
-                        }
-
-                        setMessages(prev => {
-                            const updated = [...prev];
-                            updated[updated.length - 1] = {
-                                ...updated[updated.length - 1],
-                                content: currentMessage
-                            };
-                            return updated;
-                        });
-                    }
+                // Check if we need to handle thinking tags
+                if (!streamingStarted) {
+                  const thinkEndIndex = currentMessage.indexOf("</think>")
+                  if (thinkEndIndex !== -1) {
+                    streamingStarted = true
+                    currentMessage = currentMessage.slice(thinkEndIndex + "</think>".length)
+                  }
                 }
 
-            } catch (err) {
-                console.error('Error streaming response:', err);
-                setMessages(prev => [...prev, { role: 'assistant', content: 'Oops! Something went wrong.' }]);
-                setLoading(false);
+                setMessages((prev) => {
+                  const updated = [...prev]
+                  const index = updated.findIndex((msg) => msg.id === messageId)
+                  if (index !== -1) {
+                    updated[index] = {
+                      ...updated[index],
+                      content: currentMessage,
+                      isLoading: false,
+                    }
+                  }
+                  return updated
+                })
+              }
+            } catch (e) {
+              console.warn("Skipping malformed JSON:", messageData)
             }
+          }
         }
-    };
+      } catch (err) {
+        console.error("Error streaming response:", err)
+        setMessages((prev) => {
+          const updated = [...prev]
+          const index = updated.findIndex((msg) => msg.id === messageId)
+          if (index !== -1) {
+            updated[index] = {
+              ...updated[index],
+              content: "Oops! Something went wrong. Please try again.",
+              isLoading: false,
+            }
+          }
+          return updated
+        })
+        setLoadingMessageId(null)
+      }
+    }
+  }
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
 
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
-
-    return (
-        <>
-            <div className="flex flex-col h-screen mx-96 p-4 backdrop-blur-sm">
-                {messages.length === 0 ? (
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={handleSend}
-                        className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10"
-                        placeholder="How may I help you?"
-                        disabled={loading}
-                    />
-                ) : (
-                    <>
-                        <div className="flex-1 overflow-y-auto mt-20 mb-4 space-y-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 px-4">
-                            {messages.map((msg, index) => (
-                                <div key={index} className={`flex flex-col ${msg.role === 'user' ? 'self-end items-end' : 'self-start items-start'}`}>
-                                    <div className={`px-4 py-2 rounded-3xl ${msg.role === 'user' ? 'bg-cyan-400 text-black text-md font-semibold rounded-s-3xl' : 'text-white text-xl rounded-e-3xl rounded-es-3xl'}`}>
-                                        {msg.role === 'user' ? (
-                                            <span>{msg.content}</span>
-                                        ) : (
-                                            <Markdown className="text-2xl">
-                                                {msg.content}
-                                            </Markdown>
-                                        )}
-
-                                    </div>
-                                </div>
-                            ))}
-                            <div ref={messagesEndRef} />
-                        </div>
-                        <div className="py-6">
-                            <input
-                                type="text"
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                onKeyDown={handleSend}
-                                className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400"
-                                placeholder="How may I help you?"
-                                disabled={loading}
-                            />
-                        </div>
-                    </>
-                )}
+  return (
+    <div>
+      <div className="flex flex-col h-screen mx-80 p-4 backdrop-blur-sm">
+        {messages.length === 0 ? (
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleSend}
+            className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10"
+            placeholder="How may I help you?"
+          />
+        ) : (
+          <>
+            <div className="flex-1 overflow-y-auto mt-20 mb-4 space-y-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 px-4">
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex flex-col ${msg.role === "user" ? "self-end items-end" : "self-start items-start"}`}
+                >
+                  <div
+                    className={`px-4 py-2 rounded-3xl ${msg.role === "user" ? "bg-cyan-500 text-black text-xl font-semibold rounded-s-3xl" : "text-white rounded-e-3xl rounded-es-3xl"}`}
+                  >
+                    {msg.role === "user" ? (
+                      <span>{msg.content}</span>
+                    ) : msg.isLoading ? (
+                      <div className="flex items-center space-x-2">
+                        <span>Thinking</span>
+                        <span className="loading-dots">
+                          <span className="dot">.</span>
+                          <span className="dot">.</span>
+                          <span className="dot">.</span>
+                        </span>
+                      </div>
+                    ) : (
+                      <Markdown className='text-2xl'>{msg.content}</Markdown>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
             </div>
-            <Footer />
-        </>
-    );
-};
+            <div className="py-6">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleSend}
+                className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400"
+                placeholder="How may I help you?"
+                disabled={loadingMessageId !== null}
+              />
+            </div>
+          </>
+        )}
+      </div>
 
-export default Chatbot;
+      {/* Add CSS for loading animation */}
+      <style jsx>{`
+        .loading-dots {
+          display: inline-flex;
+        }
+        
+        .dot {
+          animation: pulse 1.5s infinite;
+          opacity: 0.5;
+        }
+        
+        .dot:nth-child(2) {
+          animation-delay: 0.5s;
+        }
+        
+        .dot:nth-child(3) {
+          animation-delay: 1s;
+        }
+        
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 0.5;
+          }
+          50% {
+            opacity: 1;
+          }
+        }
+      `}</style>
+    </div>
+  )
+}
+
+export default Chatbot
