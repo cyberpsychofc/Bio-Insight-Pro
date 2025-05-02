@@ -67,15 +67,15 @@ export default function About() {
                                 {[
                                     {
                                         name: "Dr. Supriya Gupta Bani",
-                                        linkedin: ""
+                                        linkedin: "https://www.linkedin.com/in/supriya-gupta-74942777"
                                     },
                                     {
                                         name: "Om Aryan",
-                                        linkedin: "https://linkedin.com/in/omaryan"
+                                        linkedin: "https://omaryan.vercel.app"
                                     },
                                     {
                                         name: "Piyush Dhamecha",
-                                        linkedin: ""
+                                        linkedin: "https://www.linkedin.com/in/piyush-dhamecha-524542289"
                                     },
                                     {
                                         name: "Mehansh Masih",
