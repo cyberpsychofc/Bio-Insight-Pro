@@ -49,7 +49,8 @@ export default function About() {
                                     "DNA Sequence Alignment & Knowledge Discovery",
                                     "Context-Aware AI Engine",
                                     "User-Friendly Interface",
-                                    "Strict Data Privacy & Compliance"
+                                    "Strict Data Privacy & Compliance",
+                                    "Integrated AI Assistant for QnA"
                                 ].map((item, index) => (
                                     <li key={index} className="flex items-center">
                                         <span className="text-cyan-400 mr-3">✦</span>

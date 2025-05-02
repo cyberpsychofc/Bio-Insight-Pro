@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { Markdown } from "../components/NonMemoizedMarkdown.jsx"
+import { Helmet } from "react-helmet"
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([])
@@ -39,7 +40,7 @@ const Chatbot = () => {
   }, [messages])
 
   const handleSend = async (e) => {
-    if (e.key === "Enter" && input.trim() !== "") {
+    if (e.key === "Enter" && !e.shiftKey && input.trim() !== "") {
       const userMessage = {
         id: Date.now() + "-user-" + Math.random().toString(36).substring(2, 9),
         role: "user",
@@ -171,14 +172,16 @@ const Chatbot = () => {
 
   return (
     <div>
-      <div className="flex flex-col h-screen mx-80 p-4 backdrop-blur-sm">
+      <Helmet><title>IntelliOnco | BioInsightPro</title></Helmet>
+      <div className="flex-col flex max-h-screen mx-80 p-4 backdrop-blur-sm">
         {messages.length === 0 ? (
-          <input
-            type="text"
+          <textarea
+            rows={4}
+            cols={50}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleSend}
-            className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10"
+            className="focus:outline-none text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none"
             placeholder="How may I help you?"
           />
         ) : (
@@ -190,12 +193,12 @@ const Chatbot = () => {
                   className={`flex flex-col ${msg.role === "user" ? "self-end items-end" : "self-start items-start"}`}
                 >
                   <div
-                    className={`px-4 py-2 rounded-3xl ${msg.role === "user" ? "bg-cyan-500 text-black text-xl font-semibold rounded-s-3xl" : "text-white rounded-e-3xl rounded-es-3xl"}`}
+                    className={`px-4 py-2 rounded-3xl ${msg.role === "user" ? "bg-cyan-500 text-black break-words max-w-[75%] text-xl font-semibold rounded-s-3xl" : "text-white rounded-e-3xl rounded-es-3xl"}`}
                   >
                     {msg.role === "user" ? (
                       <span>{msg.content}</span>
                     ) : msg.isLoading ? (
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 text-2xl">
                         <span>Thinking</span>
                         <span className="loading-dots">
                           <span className="dot">.</span>
@@ -212,12 +215,13 @@ const Chatbot = () => {
               <div ref={messagesEndRef} />
             </div>
             <div className="py-6">
-              <input
-                type="text"
+              <textarea
+            rows={4}
+            cols={50}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleSend}
-                className="focus:outline-none text-2xl rounded-3xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400"
+                className="focus:outline-none text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400  [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none"
                 placeholder="How may I help you?"
                 disabled={loadingMessageId !== null}
               />
