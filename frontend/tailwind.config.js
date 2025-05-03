@@ -9,6 +9,7 @@ export default {
       animation: {
         neon: 'neon 3s linear infinite',
         shine: 'shine 5s linear infinite',
+        strokeShine: 'strokeShine 3s linear infinite',
       },
       keyframes: {
         neon: {
@@ -18,7 +19,11 @@ export default {
         shine : {
           '0%': { 'background-position': '100%' },
           '100%': { 'background-position': '-100%' },
-        },  
+        },
+        strokeShine: {
+          '0%': { 'background-position': '200% 0%' },
+          '100%': { 'background-position': '-200% 0%' },
+        },
       },
     },
   },

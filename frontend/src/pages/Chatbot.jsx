@@ -173,7 +173,7 @@ const Chatbot = () => {
   return (
     <div>
       <Helmet><title>IntelliOnco | BioInsightPro</title></Helmet>
-      <div className="flex-col flex max-h-screen mx-80 p-4 backdrop-blur-sm">
+      <div className="h-[897px] flex-col flex max-h-screen mx-80 backdrop-blur-sm">
         {messages.length === 0 ? (
           <textarea
             rows={4}
@@ -181,7 +181,7 @@ const Chatbot = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleSend}
-            className="focus:outline-none text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none"
+            className="focus:outline-none text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none backdrop-blur-sm"
             placeholder="How may I help you?"
           />
         ) : (
@@ -216,12 +216,12 @@ const Chatbot = () => {
             </div>
             <div className="py-6">
               <textarea
-            rows={4}
-            cols={50}
+                rows={4}
+                cols={50}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleSend}
-                className="focus:outline-none text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400  [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none"
+                className="focus:outline-none text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400  [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none  backdrop-blur-sm"
                 placeholder="How may I help you?"
                 disabled={loadingMessageId !== null}
               />
