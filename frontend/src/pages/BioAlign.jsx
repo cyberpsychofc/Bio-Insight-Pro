@@ -107,7 +107,7 @@ export default function BioAlign() {
                     Align
                 </button>
                 <div
-                    className="mt-9 bg-gray-950 text-center items-center justify-center mb-20 mx-auto p-5 rounded-md text-lg text-white [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[400px] xs:w-[200px] bg-opacity-75"
+                    className="mt-9 bg-gray-950 text-center items-center justify-center mb-20 mx-auto p-5 rounded-md text-lg text-white [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 lg:w-[900px] xl:w-[1200px] md:w-[600px] sm:w-[400px] w-2/3 bg-opacity-75"
                     style={{
                         maxHeight: "70vh",
                         overflowY: "auto",
