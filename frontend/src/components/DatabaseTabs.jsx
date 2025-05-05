@@ -23,7 +23,7 @@ export default function DatabaseTabs({ onSelectDatabase }) {
   };
 
   return (
-    <div className="mb-4 border-b border-gray-200 dark:border-gray-700 z-10 top-[100px] left-0 right-0 backdrop-blur-md bg-transparent sticky">
+    <div className="mb-4 border-b border-gray-200 dark:border-gray-700 z-10 top-[71.49px] md:top-[126px] lg:top-[100px] left-0 right-0 backdrop-blur-md bg-transparent sticky">
       <ul className="flex flex-wrap -mb-px text-sm font-medium text-center">
         {databases.map((db, index) => (
           <li key={index} role="presentation" className="flex-grow">

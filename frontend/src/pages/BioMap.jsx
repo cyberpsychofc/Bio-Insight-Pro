@@ -30,13 +30,30 @@ export default function BioMap() {
     }
   }, [relFound]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (graphInstance.current && graphRef.current) {
+        const { width, height } = graphRef.current.getBoundingClientRect();
+        graphInstance.current.width(width).height(height);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial size setup
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   async function loadData(database) {
     const { nodes, links } = await getGraphData(database);
 
     if (graphRef.current) {
       if (!graphInstance.current) {
+        const { width, height } = graphRef.current.getBoundingClientRect();
         graphInstance.current = ForceGraph3D()(graphRef.current)
-          .backgroundColor("#000000").width(window.innerWidth).height(window.innerHeight);
+          .backgroundColor("#000000")
+          .width(width)
+          .height(height);
 
         // Add Bloom Effect
         const bloomPass = new UnrealBloomPass();
@@ -55,19 +72,18 @@ export default function BioMap() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Helmet>
-        <title>
-          BioMap | BioInsightPro
-        </title>
+        <title>BioMap | BioInsightPro</title>
       </Helmet>
-      <DatabaseTabs onSelectDatabase={setSelectedDatabase} />
-      <div className="grid justify-center w-auto">
-        <div ref={graphRef} />
+        <DatabaseTabs onSelectDatabase={setSelectedDatabase} />
+      <div className="flex-grow w-full">
+        <div
+          ref={graphRef}
+          className="w-full h-[calc(100vh-120px)] md:h-[calc(100vh-100px)]"
+        />
       </div>
-      <div className='w-full'>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }

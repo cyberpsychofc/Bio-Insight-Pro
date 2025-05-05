@@ -127,34 +127,33 @@ export default function Similarity() {
                 Similarity | BioInsightPro
             </title>
         </Helmet>
-        <div className="min-h-[85vh] flex items-center justify-start">
-            {isLoading ? (
-                <div className='w-full flex items-center justify-center p-10'>
-                    <div className='w-2/3 -translate-y-60'>
-                        <ShinyText text={loadingText + '...'} disabled={false} speed={3} className="text-4xl" />
-                    </div>
+        <div className="flex items-center mb-[400px]">
+            <div className='w-full flex items-center justify-center p-10'>
+                <div className='w-2/3 mt-3 grid'>
+                    {isLoading ? (
+                        <ShinyText text={loadingText + '...'} disabled={false} speed={3} className="text-2xl mb-[700px]" />
+                    ) : (
+                        <div className="mb-[430px] grid items-center justify-center text-center">
+                            <Markdown>
+                                {result.ModelResponse}
+                            </Markdown>
+                            <AnimatedNumber value={result.similarity_score * 100} />
+                            <button
+                                className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-16"
+                                onClick={handleKnowledgeGraph}
+                            >
+                                Create Map
+                            </button>
+                            {isGraph && (
+                                <div className="flex items-center justify-center mt-20">
+                                    <Loader2 />
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                 </div>
-            ) : (
-                <div className='w-full flex items-center justify-center p-10'>
-                    <div className='w-2/3 mt-32 grid'>
-                        <Markdown>
-                            {result.ModelResponse}
-                        </Markdown>
-                        <AnimatedNumber value={result.similarity_score * 100} />
-                        <button
-                            className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-16"
-                            onClick={handleKnowledgeGraph}
-                        >
-                            Create Map
-                        </button>
-                        {isGraph && (
-                            <div className="flex items-center justify-center">
-                                <Loader2 />
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
+            </div>
         </div>
         <div>
             <Footer />
