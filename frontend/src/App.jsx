@@ -26,13 +26,17 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
+      const screenWidth = window.innerWidth;
+      const scrollThreshold = screenWidth <= 1024 ? 500 : 1013;
+  
       const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
-      setIsFixedDivVisible((window.scrollY > 1013 && window.scrollY + 1000 <= footerTop));
+      setIsFixedDivVisible(window.scrollY > scrollThreshold && window.scrollY + 1000 <= footerTop);
     };
-
+  
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
 
   function upload() {
     fileInputRef.current.click();
