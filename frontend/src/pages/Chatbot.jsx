@@ -173,32 +173,36 @@ const Chatbot = () => {
   return (
     <div>
       <Helmet><title>IntelliOnco | BioInsightPro</title></Helmet>
-      <div className="h-[897px] flex-col flex max-h-screen mx-80 backdrop-blur-sm">
+      <div className="flex flex-col w-full px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-80 backdrop-blur-sm">
         {messages.length === 0 ? (
-          <textarea
-            rows={4}
-            cols={50}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleSend}
-            className="focus:outline-none text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400 mt-96 mb-10 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none backdrop-blur-sm"
-            placeholder="How may I help you?"
-          />
+          <div className="flex-1 flex items-center justify-center mt-80">
+            <textarea
+              rows={4}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleSend}
+              className="focus:outline-none text-lg sm:text-xl md:text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full max-w-3xl p-4 placeholder-gray-400 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none backdrop-blur-sm"
+              placeholder="How may I help you?"
+            />
+          </div>
         ) : (
           <>
-            <div className="flex-1 overflow-y-auto mt-20 mb-4 space-y-4 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 px-4">
+            <div className="max-h-[700px] overflow-auto flex-1 overflow-y-auto mt-4 mb-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 px-0 sm:px-2">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
                   className={`flex flex-col ${msg.role === "user" ? "self-end items-end" : "self-start items-start"}`}
                 >
                   <div
-                    className={`px-4 py-2 rounded-3xl ${msg.role === "user" ? "bg-cyan-500 text-black break-words max-w-[75%] text-xl font-semibold rounded-s-3xl" : "text-white rounded-e-3xl rounded-es-3xl"}`}
+                    className={`px-3 sm:px-4 py-2 rounded-3xl ${msg.role === "user"
+                      ? "bg-cyan-500 text-black break-words max-w-[85%] sm:max-w-[75%] text-base sm:text-lg md:text-xl font-semibold rounded-s-3xl mt-5"
+                      : ""
+                      }`}
                   >
                     {msg.role === "user" ? (
                       <span>{msg.content}</span>
                     ) : msg.isLoading ? (
-                      <div className="flex items-center space-x-2 text-2xl">
+                      <div className="flex items-center space-x-2 text-base sm:text-lg md:text-xl">
                         <span>Thinking</span>
                         <span className="loading-dots">
                           <span className="dot">.</span>
@@ -207,31 +211,36 @@ const Chatbot = () => {
                         </span>
                       </div>
                     ) : (
-                      <Markdown className='text-2xl'>{msg.content}</Markdown>
+                      <>
+                        <div className="">
+                          <Markdown>{msg.content}</Markdown>
+                        </div>
+                      </>
                     )}
+                    
                   </div>
+
                 </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
-            <div className="py-6">
-              <textarea
-                rows={4}
-                cols={50}
+            <div className="py-3 sm:py-4 md:py-6 mb-2 sm:mb-4">
+              
+            </div>
+            <textarea
+                rows={2}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleSend}
-                className="focus:outline-none text-2xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-4 placeholder-gray-400  [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none  backdrop-blur-sm"
+                className="focus:outline-none text-base sm:text-lg md:text-xl rounded-xl opacity-70 bg-gray-700 text-white w-full p-3 sm:p-4 placeholder-gray-400 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-transparent dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 resize-none backdrop-blur-sm mb-5"
                 placeholder="How may I help you?"
                 disabled={loadingMessageId !== null}
               />
-            </div>
           </>
         )}
-      </div>
 
-      {/* Add CSS for loading animation */}
-      <style jsx>{`
+        {/* Add CSS for loading animation */}
+        <style jsx>{`
         .loading-dots {
           display: inline-flex;
         }
@@ -258,6 +267,7 @@ const Chatbot = () => {
           }
         }
       `}</style>
+      </div>
     </div>
   )
 }

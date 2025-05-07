@@ -5,6 +5,7 @@ import alignIcon from "/align.svg"
 import graphIcon from "/graph.svg"
 import { isAnalysed, relFound } from "../pages/Similarity"
 import { Menu, X } from "lucide-react"
+import ShinyText from "./ui/ShinyText"
 
 export default function Navbar() {
   const location = useLocation()
@@ -67,30 +68,20 @@ export default function Navbar() {
           </svg>
 
         </Link>
+        <div
+          className="lg:hidden text-cyan-300 bg-clip-text inline-block"
+          style={{
+            backgroundImage: 'linear-gradient(120deg, rgba(0, 255, 255, 0) 20%, rgba(0, 255, 255, 0.8) 50%, rgba(0, 255, 255, 0) 80%)',
+            backgroundSize: '200% 100%',
+            WebkitBackgroundClip: 'text',
+            color: 'transparent',
+            animation: 'shine 2s linear infinite',
+          }}
+        >
+          Bio Insight Pro
+        </div>
 
-        <svg viewBox="0 0 700 70" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="cyan">
-                <animate attributeName="offset" values="-1;1" dur="3s" repeatCount="indefinite" />
-              </stop>
-              <stop offset="50%" stop-color="white">
-                <animate attributeName="offset" values="0;2" dur="3s" repeatCount="indefinite" />
-              </stop>
-              <stop offset="100%" stop-color="cyan">
-                <animate attributeName="offset" values="1;3" dur="3s" repeatCount="indefinite" />
-              </stop>
-            </linearGradient>
-          </defs>
 
-          <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
-            font-size="50"
-            fill="transparent"
-            stroke="url(#glowGradient)"
-            stroke-width="1">
-            Bio Insight Pro
-          </text>
-        </svg>
 
 
 

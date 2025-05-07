@@ -26,13 +26,17 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
+      const screenWidth = window.innerWidth;
+      const scrollThreshold = screenWidth <= 1024 ? 500 : 1013;
+  
       const footerTop = footerRef.current?.getBoundingClientRect().top + window.scrollY;
-      setIsFixedDivVisible((window.scrollY > 1013 && window.scrollY + 1000 <= footerTop));
+      setIsFixedDivVisible(window.scrollY > scrollThreshold && window.scrollY + 1000 <= footerTop);
     };
-
+  
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
 
   function upload() {
     fileInputRef.current.click();
@@ -139,25 +143,23 @@ export default function App() {
 
           {/* Uploaded Files Info */}
           <div className='flex items-center justify-center flex-col'>
-            <div className="px-20 border-2 border-gray-700 w-2/3 py-5 mt-20 mx-20 mb-10 rounded-lg">
+            <div className="px-6 md:px-20 border-2 border-gray-700 w-2/3 py-5 mt-20 mx-20 mb-10 rounded-lg">
               <h2 className="text-xl text-white p-2 justify-center flex">Uploaded Files</h2>
               {Array.from(localFiles).length === 0 ? (
                 <p className="text-white flex justify-center text-center">No files uploaded.</p>
               ) : (
-                <ul>
+                <ul className="w-full max-w-full">
                   {Array.from(localFiles).map((file, index) => (
                     <li
                       key={index}
-                      className="flex justify-between items-center bg-gray-800 p-4 mb-2 rounded-md bg-opacity-75"
+                      className="grid grid-cols-1 md:flex md:flex-row gap-2 justify-between items-center bg-gray-800 p-3 sm:p-4 mb-2 rounded-md bg-opacity-75 w-full"
                     >
-                      <div>
-                        <p className="text-white">{file.name}</p>
-                        <p className="text-gray-400 text-sm">
-                          {(file.size / 1024).toFixed(2)} KB
-                        </p>
+                      <div className="overflow-hidden min-w-0 flex-1">
+                        <p className="text-white mb-1 text-sm sm:text-base truncate font-medium">{file.name}</p>
+                        <p className="text-gray-400 text-xs sm:text-sm">{(file.size / 1024).toFixed(2)} KB</p>
                       </div>
                       <button
-                        className="bg-red-500 hover:bg-transparent hover:text-red-500 transition-all duration-300 text-white rounded px-4 py-2"
+                        className="bg-red-500 hover:bg-transparent border border-transparent hover:border-red-500 hover:text-red-500 transition-all duration-300 text-white rounded px-3 py-1.5 sm:px-4 sm:py-2 text-sm whitespace-nowrap w-full md:w-auto mt-2 md:mt-0"
                         onClick={() => handleRemoveFile(index)}
                       >
                         Remove
