@@ -14,8 +14,8 @@ entites_to_be_extracted = ['CANCER','DRUG','DISEASE','GENE','PROTIEN','BIO-MARKE
 os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
 
 llm = ChatOpenAI(
-    model="gpt-4o-mini",
-    temperature=0) # LLM used to perform NER
+    model="gpt-4o-mini", # Switch to 4o for better results
+    temperature=0.1) # LLM used to perform NER
 
 llm_transformer = LLMGraphTransformer(
     llm=llm,

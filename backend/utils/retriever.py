@@ -1,4 +1,5 @@
 import os
+from concurrent.futures import ThreadPoolExecutor
 from django.conf import settings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
@@ -57,26 +58,30 @@ def get_documents(text):
 
     return indexed_chunks
 
-# Pass the paths of all the files to be taken into account of context by the LLM
-def store_embeddings(*args):
-    embeddings = load_embedding_model()
+def process_file(file, embeddings):
+    loader = PyPDFLoader(
+        os.path.join(settings.STATICFILES_DIRS[0], 'uploads', file)
+    )
+    pages = loader.load()
+    docsforembedding = text_splitter.split_documents(pages)
+
     vector_store = PineconeVectorStore(embedding=embeddings)
-
-    for file in args:
-        loader = PyPDFLoader(
-            os.path.join(settings.STATICFILES_DIRS[0], 'uploads', file))
-        pages = loader.load()  # Load document pages
-
-        docsforembedding = text_splitter.split_documents(pages)  # Split all pages at once
-
-        # Store embeddings in Pinecone
-        vector_store.from_documents(
-            documents=docsforembedding,
-            embedding=embeddings,
-            index_name=index_name
-        )
-
+    vector_store.from_documents(
+        documents=docsforembedding,
+        embedding=embeddings,
+        index_name=index_name
+    )
     return vector_store
+
+
+def store_embeddings(*args):
+    embeddings = load_embedding_model() 
+    # Using multiple threads to store chunks parallely
+    with ThreadPoolExecutor() as executor:
+        futures = [executor.submit(process_file, file, embeddings) for file in args]
+        vector_stores = [future.result() for future in futures]
+
+    return vector_stores[0] if vector_stores else None
 
 def retrieval_chain(llm, db):
     retriever = db.as_retriever()
