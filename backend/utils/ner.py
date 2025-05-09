@@ -14,8 +14,8 @@ entites_to_be_extracted = ['CANCER','DRUG','DISEASE','GENE','PROTIEN','BIO-MARKE
 os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
 
 llm = ChatOpenAI(
-    model="gpt-4o-mini", # Switch to 4o for better results
-    temperature=0.1) # LLM used to perform NER
+    model="gpt-4o",
+    temperature=0) # LLM used to perform NER
 
 llm_transformer = LLMGraphTransformer(
     llm=llm,
@@ -28,43 +28,15 @@ os.environ["NEO4J_USERNAME"] = os.environ.get("NEO4J_USERNAME")
 os.environ["NEO4J_PASSWORD"] = os.environ.get("NEO4J_PASSWORD")
 
 
-def chunk_text(text, chunk_size=4000):  # Adjust chunk size as needed
-    sentences = re.split(r'(?<=[.!?])\s+', text)  # Split by sentence boundaries
-    chunks, chunk = [], []
-    current_length = 0
-
-    for sentence in sentences:
-        sentence_length = len(sentence)
-        if current_length + sentence_length <= chunk_size:
-            chunk.append(sentence)
-            current_length += sentence_length
-        else:
-            chunks.append(" ".join(chunk))
-            chunk = [sentence]
-            current_length = sentence_length
-
-    if chunk:
-        chunks.append(" ".join(chunk))
-
-    return chunks
-
-def process_chunk(args):
-    neo4jdb, text_chunk = args  # Unpack arguments
+def perform_ner(neo4jdb, text):
     graphdb = Neo4jGraph(
         url=os.environ["NEO4J_URI"], 
         username=os.environ["NEO4J_USERNAME"], 
         password=os.environ["NEO4J_PASSWORD"],
         database=neo4jdb
     )
-
-    docs = [Document(page_content=text_chunk)]
-    graph_docs = llm_transformer.convert_to_graph_documents(docs)
     
-    # Store extracted entities in Neo4j
+    docs = [Document(page_content=text)]
+    graph_docs = llm_transformer.convert_to_graph_documents(docs)
     graphdb.add_graph_documents(graph_docs)
-
-def perform_ner_parallel(neo4jdb, large_text, num_workers=4):
-    text_chunks = chunk_text(large_text, chunk_size=4000)  # Split text into chunks
-
-    with ProcessPoolExecutor(max_workers=num_workers) as executor:
-        executor.map(process_chunk, [(neo4jdb, chunk) for chunk in text_chunks])
+    graphdb.close()
