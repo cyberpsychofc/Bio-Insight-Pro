@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { Markdown } from "../components/NonMemoizedMarkdown.jsx"
 import { Helmet } from "react-helmet"
 import { RefreshCcw } from "lucide-react"
+import { fetchResponse } from "./Similarity.jsx"
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([])
@@ -182,14 +183,26 @@ const Chatbot = () => {
   }
 
   const sendApiRequest = async (messageHistory) => {
-    const messageId = Date.now() + "-assistant-" + Math.random().toString(36).substring(2, 9)
-    const newBotMessage = { id: messageId, role: "assistant", content: "", isLoading: true }
-
-    setMessages((prev) => [...prev, newBotMessage])
-    setLoadingMessageId(messageId)
-    setIsProcessing(true)
-
+    const messageId = Date.now() + "-assistant-" + Math.random().toString(36).substring(2, 9);
+    const newBotMessage = { id: messageId, role: "assistant", content: "", isLoading: true };
+  
+    setMessages((prev) => [...prev, newBotMessage]);
+    setLoadingMessageId(messageId);
+    setIsProcessing(true);
+  
     try {
+      // Inject system prompt to restrict bot to Biology
+      const biologySystemMessage = {
+        role: "system",
+        content: "You are a helpful assistant that only answers questions related to Context passed with this message. Politely refuse to answer anything unrelated to the context passed (Oncology).",
+      };
+  
+      let updatedMessageHistory = [biologySystemMessage, ...messageHistory];
+
+      let similarityResult = {role: "system", content: "Similarity result: " + JSON.stringify(fetchResponse)};
+
+      if (similarityResult) updatedMessageHistory = [...updatedMessageHistory, similarityResult]
+  
       const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -198,23 +211,24 @@ const Chatbot = () => {
         },
         body: JSON.stringify({
           model: "deepseek-r1-distill-llama-70b",
-          messages: messageHistory,
+          messages: updatedMessageHistory,
           max_completion_tokens: 4096,
           stream: true,
         }),
-      })
-
+      });
+  
       if (!res.ok) {
-        throw new Error(`API responded with status: ${res.status}`)
+        throw new Error(`API responded with status: ${res.status}`);
       }
-
-      const reader = res.body.getReader()
-      const decoder = new TextDecoder("utf-8")
-      await processStreamResponse(reader, decoder, messageId)
+  
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      await processStreamResponse(reader, decoder, messageId);
     } catch (err) {
-      handleApiError(err, messageId)
+      handleApiError(err, messageId);
     }
-  }
+  };
+  
 
   const handleSend = async (e) => {
     if ((e.key === "Enter" && !e.shiftKey && input.trim() !== "") || e.type === "click") {
