@@ -16,6 +16,8 @@ export function resetIsAnalysed() {
     isAnalysed = false;
 }
 
+export let fetchResponse = null;
+
 export let n = filesSize;
 
 export let relFound = false;
@@ -51,7 +53,7 @@ export default function Similarity() {
             const analyzeResponse = await axios.post('http://localhost:8000/agent/similarity/predict');
             console.log('Analyze Response:', analyzeResponse.data);
 
-            const fetchResponse = await axios.get('http://localhost:8000/agent/similarity/fetch');
+            fetchResponse = await axios.get('http://localhost:8000/agent/similarity/fetch');
             console.log('Fetch Response:', fetchResponse.data);
 
             setResult(fetchResponse.data);
