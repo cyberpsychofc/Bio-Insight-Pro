@@ -97,7 +97,63 @@ export default function About() {
                             </div>
                         </div>
                     </div>
+                     {/* Instructions */}
+                    <div className="text-center py-10 bg-[#0a172d]">
+                        <h3 className="text-3xl font-bold bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent mb-6">
+                            Instructions and Procedure
+                        </h3>
 
+                        <div className="text-gray-100 text-left max-w-3xl mx-auto space-y-4 leading-relaxed">
+                            <p>
+                                <span className="text-cyan-400 mr-3">✦</span>
+                                Upload two medical PDF files named <strong>doca.pdf</strong> and <strong>docb.pdf</strong>.
+                            </p>
+
+                            <p>
+                                <span className="text-cyan-400 mr-3">✦</span>
+                                The system will analyze and compare the documents, providing:
+                            </p>
+
+                            <ul className="list-none pl-6 space-y-1">
+                                <li>
+                                    <span className="text-cyan-600 mr-3">✦</span>
+                                    Summary and key insights
+                                </li>
+                                <li>
+                                    <span className="text-cyan-600 mr-3">✦</span>
+                                    Notable similarities and differences (see <strong>Similarity</strong> page)
+                                </li>
+                                <li>
+                                    <span className="text-cyan-600 mr-3">✦</span>
+                                    A calculated similarity score
+                                </li>
+                                <li>
+                                    <span className="text-cyan-600 mr-3">✦</span>
+                                    User-friendly result display
+                                </li>
+                            </ul>
+
+                            <p>
+                                <span className="text-cyan-400 mr-3">✦</span>
+                                Use the <strong>IntelliOnco</strong> page to ask questions about the documents
+                            </p>
+
+                            <p>
+                                <span className="text-cyan-400 mr-3">✦</span>
+                                Ensure documents are in <strong>PDF format</strong> and contain <strong>relevant medical information</strong>.
+                            </p>
+
+                            <p>
+                                <span className="text-cyan-400 mr-3">✦</span>
+                                After the analysis, click the button to view the <strong>Knowledge Graph</strong>.
+                            </p>
+
+                            <p>
+                                <span className="text-cyan-400 mr-3">✦</span>
+                                The <strong>BioMap</strong> page will visually display relationships and insights using the Knowledge Graph.
+                            </p>
+                        </div>
+                    </div>
                     {/* Call to Action */}
                     <div className="text-center bg-[#0a172d] rounded-lg p-8 shadow-xl">
                         <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent mb-4 p-2">Join Our Journey</h3>
