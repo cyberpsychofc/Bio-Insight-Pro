@@ -80,16 +80,7 @@ export default function Navbar() {
         >
           Bio Insight Pro
         </div>
-
-
-
-
-
-
-
-
-
-
+        
         {/* Mobile menu button */}
         <button
           onClick={toggleMenu}
