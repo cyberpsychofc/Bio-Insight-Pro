@@ -8,6 +8,8 @@ import { Helmet } from "react-helmet";
 import { filesSize } from "../App.jsx";
 import { useNavigate } from "react-router";
 import Loader2 from "../components/Loader2.jsx";
+import { RefreshCcw } from "lucide-react";
+
 // Global variable
 export let isAnalysed = false;
 export function resetIsAnalysed() {
@@ -138,12 +140,18 @@ export default function Similarity() {
                                 {result.ModelResponse}
                             </Markdown>
                             <AnimatedNumber value={result.similarity_score * 100} />
-                            <button
-                                className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-16"
-                                onClick={handleKnowledgeGraph}
-                            >
-                                Create Map
-                            </button>
+                            <div className="flex">
+                                <button
+                                    className="my-10 mx-auto w-auto rounded text-lg font-semibold transition-all duration-300 px-5 py-3 bg-cyan-300 text-black hover:bg-transparent hover:text-cyan-300 shadow-[0_0_10px_#22d3ee] mt-16"
+                                    onClick={handleKnowledgeGraph}
+                                >
+                                    Create Map
+                                </button>
+                                <button onClick={handleAnalyze} className="p-2 group">
+                                    <RefreshCcw className="w-6 h-6 text-white group-hover:text-cyan-500 transition-colors duration-200" />
+                                </button>
+                            </div>
+
                             {isGraph && (
                                 <div className="flex items-center justify-center mt-20">
                                     <Loader2 />
