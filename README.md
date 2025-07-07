@@ -3,6 +3,9 @@
 ##  Project Overview  
 Bio Insight Pro is an AI-powered tool designed to assist doctors and researchers by analyzing large volumes of medical and research documents. It leverages NLP and deep learning to classify clinical texts by cancer type, extract key insights, and perform DNA sequence analysis.  
 
+##  Preview
+(https://youtu.be/nqr7e4pF33A)
+
 ##  Features  
 - **Clinical Document Classification:** Categorizes documents based on cancer type.  
 - **Knowledge Discovery:** Provides insights from medical texts, including DNA sequence analysis.  
